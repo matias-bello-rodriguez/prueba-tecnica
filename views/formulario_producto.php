@@ -83,11 +83,11 @@
                 <!-- Ahora los materiales se cargan dinámicamente desde la BD usando tabla intersección -->
                 <fieldset>
                     <legend>Material del Producto:</legend>
-                    <?php foreach($materiales as $material): ?>
-                        <div class="checkbox-grid">
+                    <div class="checkbox-container">
+                        <?php foreach($materiales as $material): ?>
                             <label><input type="checkbox" name="materiales[]" value="<?= htmlspecialchars($material['id']) ?>"> <?= htmlspecialchars($material['nombre']) ?></label>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </fieldset>
             </div>
      
