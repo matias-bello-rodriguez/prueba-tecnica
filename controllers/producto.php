@@ -14,12 +14,14 @@ class ProductoController{
 
     //función para mostrar valores no dinámicos del formulario
 
+    //función para mostrar valores no dinámicos del formulario
     public function mostrarDatosPorDefecto(){
         try {
             //hashmap que toma los valores que retornan las funciones de model 
             $data = [
                 'bodegas' => $this->model->obtenerBodegas(),
-                'monedas' => $this->model->obtenerMonedas()            
+                'monedas' => $this->model->obtenerMonedas(),
+                'materiales' => $this->model->obtenerMateriales() //agregado para cargar materiales desde BD
             ];
 
             $this->cargarVista('formulario_producto', $data); //función para cargar datos en el formulario
@@ -96,15 +98,16 @@ class ProductoController{
     }
 
     //obtiene los datos del formulario, y valida si tienen los tipos de datos correctos
+    //obtiene los datos del formulario, y valida si tienen los tipos de datos correctos
     private function obtenerDatosFormulario() {
         $materiales = $_POST['materiales'] ?? [];
 
-            // Procesar materiales como array de strings (valores directos)
+        // Procesar materiales como array de IDs (no strings) para tabla intersección
         $materialesLimpios = [];
-        foreach ($materiales as $material) {
-            $materialLimpio = htmlspecialchars(trim($material), ENT_QUOTES, 'UTF-8');
-            if (!empty($materialLimpio)) {
-                $materialesLimpios[] = $materialLimpio;
+        foreach ($materiales as $materialId) {
+            $materialIdLimpio = filter_var($materialId, FILTER_VALIDATE_INT);
+            if ($materialIdLimpio !== false && $materialIdLimpio > 0) {
+                $materialesLimpios[] = $materialIdLimpio;
             }
         }
 
@@ -116,7 +119,7 @@ class ProductoController{
             'moneda_id' => filter_input(INPUT_POST, 'moneda_id', FILTER_VALIDATE_INT),
             'precio' => filter_input(INPUT_POST, 'precio', FILTER_VALIDATE_FLOAT),
             'descripcion' => htmlspecialchars(trim($_POST['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8'),
-            'materiales' => $materialesLimpios,
+            'materiales' => $materialesLimpios, //array de IDs para tabla intersección
         ];
     }
  
@@ -159,7 +162,9 @@ class ProductoController{
             $errores[] = "La descripción no puede exceder 500 caracteres";
         }
         
-        if (empty($datos['materiales']) || count($datos['materiales']) < 2) {
+        if (empty($datos['materiales'])) {
+            $errores[] = "Debe seleccionar al menos 2 materiales";
+        } else if (count($datos['materiales']) < 2) {
             $errores[] = "Debe seleccionar al menos 2 materiales";
         }
         

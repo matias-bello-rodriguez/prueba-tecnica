@@ -104,10 +104,31 @@ class Producto{
         this.setLoading(true); //marcar evento como cargando
 
         try {
-            const formData = new FormData(this.form); //crear una constante formData con el objeto FormData 
-            formData.append('ajax', '1') //pasar parámetros ajax a el array
+            const formData = new FormData();
+            formData.append('ajax', '1');
+            formData.append('action', 'registrar_producto');
+            
+            const codigo = document.getElementById('codigo');
+            const nombre = document.getElementById('nombre');
+            const bodega = document.getElementById('bodega');
+            const sucursal = document.getElementById('sucursal');
+            const moneda = document.getElementById('moneda');
+            const precio = document.getElementById('precio');
+            const descripcion = document.getElementById('descripcion');
+            
+            if (codigo) formData.append('codigo', codigo.value);
+            if (nombre) formData.append('nombre', nombre.value);
+            if (bodega) formData.append('bodega_id', bodega.value);
+            if (sucursal) formData.append('sucursal_id', sucursal.value);
+            if (moneda) formData.append('moneda_id', moneda.value);
+            if (precio) formData.append('precio', precio.value);
+            if (descripcion) formData.append('descripcion', descripcion.value);
+            
+            const materialesChecked = document.querySelectorAll('input[name="materiales[]"]:checked');
+            materialesChecked.forEach(material => {
+                formData.append('materiales[]', material.value);
+            });
 
-            //pasar la respuesta con parámetros de archivo y objeto con metodo y cuerpo
             const response = await fetch('index.php',{
                 method: 'POST',
                 body: formData
@@ -121,8 +142,6 @@ class Producto{
             //definir variable data con la respuesta JSON enviada de PHP
             const data = await response.json();
             
-            // si dentro de data, el valor de la key succes es true, devuelve alerta y resetea el formulario, de otra forma desplega el error
-
             if(data.success){
                 alert(data.message);
                 this.resetForm();
@@ -130,11 +149,10 @@ class Producto{
                 alert(data.message);
             }
 
-        //al encontrar una excepcion    
         } catch (error) {
-            alert('Error de conexión')
+            alert('Error de conexión');
         } finally{
-            this.setLoading(false) //de cualquier forma, el estado de cargado se modifica a false
+            this.setLoading(false);
         }
 
     }
@@ -268,21 +286,21 @@ class Producto{
                 break;
                 
             case 'moneda_id':
-                if (!valor) {
-                    errorMsj = 'Este campo es requerido';
+                if (!valor || valor === '') {
+                    errorMsj = 'Debe seleccionar una moneda';
                 }
                 break;
                 
            case 'precio':
-            if (!valor) {
-                errorMsj = 'El precio es requerido';
-            } else {
-                const precioNumero = parseFloat(valor);
-                if (isNaN(precioNumero) || precioNumero <= 0) {
-                    errorMsj = 'El precio debe ser un número mayor a 0';
+                if (!valor) {
+                    errorMsj = 'El precio es requerido';
+                } else {
+                    const precioNumero = parseFloat(valor);
+                    if (isNaN(precioNumero) || precioNumero <= 0) {
+                        errorMsj = 'El precio debe ser un número mayor a 0';
+                    }
                 }
-            }
-            break;
+                break;
                 
         case 'descripcion':
             if (!valor) {

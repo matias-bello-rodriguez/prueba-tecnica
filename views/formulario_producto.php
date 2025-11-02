@@ -80,21 +80,14 @@
      
             <div class="form-group">
                 <!-- se establece un orden distinto, de manera que los labels/inputs puedan estar organizados como checkbox de forma horizontal -->
+                <!-- Ahora los materiales se cargan dinámicamente desde la BD usando tabla intersección -->
                 <fieldset>
                     <legend>Material del Producto:</legend>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="materiales[]" value="Madera"> Madera</label>
-                    </div>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="materiales[]" value="Metal"> Metal</label>
-                    </div>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="materiales[]" value="Plástico"> Plástico</label>
-                    </div>
-
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="materiales[]" value="Vidrio"> Vidrio</label>
-                    </div>
+                    <?php foreach($materiales as $material): ?>
+                        <div class="checkbox-grid">
+                            <label><input type="checkbox" name="materiales[]" value="<?= htmlspecialchars($material['id']) ?>"> <?= htmlspecialchars($material['nombre']) ?></label>
+                        </div>
+                    <?php endforeach; ?>
                 </fieldset>
             </div>
      
