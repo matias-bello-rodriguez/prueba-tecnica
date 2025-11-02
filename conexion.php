@@ -11,9 +11,9 @@ class DataBase {
         'host' => 'localhost',
         'port' => '5432',
         'dbname' => 'registro_producto',  //nombre de la BD
-        'username' => 'root', //usuario de la BD
+        'username' => 'postgres', //usuario de la BD
         'password' => 'rayen123', //contraseña de la BD
-        'charset' => 'utf8mb4', //conjunto de caracteres para soportar distintos idiomas y special characters
+        'charset' => 'utf8', //conjunto de caracteres para soportar distintos idiomas y special characters
     ];
 
     private function __construct(){   //constructor vacío
@@ -23,7 +23,7 @@ class DataBase {
     
     private function connect(){  //metodo que conecta a al BD
             try{
-                $dsn = sprintf("pgsql:host=%s;port=%s,dbname=%s",  //construye pdo(php data object) 
+                $dsn = sprintf("pgsql:host=%s;port=%s;dbname=%s",  //construye pdo(php data object) 
                 self::CONFIG['host'],  //estas 3 lineas, llaman a la variables de clase CONFIG
                 self::CONFIG['port'],
                 self::CONFIG['dbname']

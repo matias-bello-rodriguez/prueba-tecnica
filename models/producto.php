@@ -18,7 +18,7 @@ class ProductoModelo{
     //función que verifica si el producto existe
     public function existeCodigoProducto($codigo){
         try{
-            $stmt = $this->db->prepare("SELECT COUNT(*) FROM productos WHERE codigo = ?"); //la variable statement guarda la cantidad de productos existentes con el código dado, en esta línea la sentencia SQL es preparada para usarse multiples veces
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM producto WHERE codigo = ?"); //la variable statement guarda la cantidad de productos existentes con el código dado, en esta línea la sentencia SQL es preparada para usarse multiples veces
             $stmt->execute([$codigo]); //se ejecuta la query, esta en forma de array, ya que puede obtener mas de un dato para ejecutar la query por cada parámetro $codigo que entre a la función
             return $stmt -> fetchColumn() > 0; //dentro de $statement que ya es un objeto, se aplica la funcion fetch que obtiene los registros ya ejecutados, si al menos existe uno, devuelve true, de lo contrario, false
         } catch(PDOException $errorEjecucion){
@@ -38,7 +38,7 @@ class ProductoModelo{
             $this->db->beginTransaction();
 
             // --2. insertar el producto 
-            $sql = "INSERT INTO productos (codigo, nombre, bodega_id, sucursal_id, moneda_id, precio, descripcion, fecha_creacion) 
+            $sql = "INSERT INTO producto (codigo, nombre, bodega_id, sucursal_id, moneda_id, precio, descripcion, fecha_creacion) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";          
             //consulta SQL para insertar los $valores del método        
             $stmt = $this->db->prepare($sql);

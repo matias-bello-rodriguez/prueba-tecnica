@@ -31,7 +31,7 @@ class ProductoController{
     }
 
     //funcion para registrar producto
-    private function registrarProducto(){
+    public function registrarProducto(){
         try {
 
             // verifica si es una funcion ajax
