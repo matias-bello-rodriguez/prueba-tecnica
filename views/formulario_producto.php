@@ -12,7 +12,7 @@
     <div class="container">
 
         <header>
-            <h1>Registro de Productos</h1>
+            <h1>Formulario de Productos</h1>
         </header>
 
 
