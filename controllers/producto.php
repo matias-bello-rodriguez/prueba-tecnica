@@ -1,8 +1,7 @@
 <?php
 
-use Dom\Implementation;
 
-require_once __DIR__ . '/../models/ProductoModel.php';
+require_once __DIR__ . '/../models/producto.php';
 
 class ProductoController{
 
@@ -80,7 +79,7 @@ class ProductoController{
             if (!$this->esAjax()) {
                 throw new Exception("Petición no válida");
             }
-            $bodegaId = filter_input(INPUT_POST, 'bodega_id', FILTER_VALIDATE_INT);//obtiene id por medio de la bodega_id del html
+            $bodegaId = filter_input(INPUT_POST, 'bodega_id', FILTER_VALIDATE_INT);//obtiene id por medio de la bodega del html
             if(!$bodegaId){
                 $this->enviarJson(false, "Id de bodega, no válido");
                 return;
@@ -98,8 +97,16 @@ class ProductoController{
 
     //obtiene los datos del formulario, y valida si tienen los tipos de datos correctos
     private function obtenerDatosFormulario() {
-        $materiales = $_POST['materiales'] ?? []; //array de materiales
-        $materiales = array_map(fn($m) => htmlspecialchars(trim($m), ENT_QUOTES, 'UTF-8'), $materiales); //es un hashmap que desprende informacion htmlchars, se agrupa en formato de hashmaps ya que los materiales traidos del DOM son un array
+        $materiales = $_POST['materiales'] ?? [];
+
+            // Procesar materiales como array de strings (valores directos)
+        $materialesLimpios = [];
+        foreach ($materiales as $material) {
+            $materialLimpio = htmlspecialchars(trim($material), ENT_QUOTES, 'UTF-8');
+            if (!empty($materialLimpio)) {
+                $materialesLimpios[] = $materialLimpio;
+            }
+        }
 
         return [
             'codigo' => htmlspecialchars(trim($_POST['codigo'] ?? ''), ENT_QUOTES, 'UTF-8'),
@@ -109,7 +116,7 @@ class ProductoController{
             'moneda_id' => filter_input(INPUT_POST, 'moneda_id', FILTER_VALIDATE_INT),
             'precio' => filter_input(INPUT_POST, 'precio', FILTER_VALIDATE_FLOAT),
             'descripcion' => htmlspecialchars(trim($_POST['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8'),
-            'materiales' => implode(',', $materiales)
+            'materiales' => $materialesLimpios,
         ];
     }
  
@@ -152,8 +159,7 @@ class ProductoController{
             $errores[] = "La descripción no puede exceder 500 caracteres";
         }
         
-        $materialesArray = explode(',', $datos['materiales']);
-        if (count(array_filter($materialesArray)) < 2) {
+        if (empty($datos['materiales']) || count($datos['materiales']) < 2) {
             $errores[] = "Debe seleccionar al menos 2 materiales";
         }
         
@@ -163,16 +169,14 @@ class ProductoController{
 
     //uso de petición AJAX
     private function esAjax() {
-        return $_SERVER['REQUEST_METHOD'] === 'POST' &&  //se usa POST ya que se actualiza y crea en la BD, ademas de razones de seguridad 
-               (isset($_POST['ajax']) || //comprueba si dentro de las peticiones POST existen peticiones AJAX
-                (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&  //comprueba de que efectivamente la request sea de AJAX
-                 strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')); //garantiza que el header que se enviará siempre tenga correlacion con el header actual
+        return isset($_POST['ajax']) && $_POST['ajax'] === '1';
+     //se usa POST ya que se actualiza y crea en la BD, ademas de razones de seguridad 
     }
         
 
     //enviar excepción usando formato JSON 
     private function enviarJson($success, $message, $data = null) {
-        header('Content-Type: application/json'); //el header estipula la respuesta HTTP 
+        header('Content-Type: application/json; charset=utf-8'); //el header estipula la respuesta HTTP 
         $response = [
             'success' => $success,
             'message' => $message
@@ -182,7 +186,7 @@ class ProductoController{
             $response['data'] = $data;
         } //si hay datos adicional succes o message, se despliega la infromación adicional en la variable $data
         
-        echo json_encode($response); //la función transforma el array en un objeto JSON
+        echo json_encode($response, JSON_UNESCAPED_UNICODE); //la función transforma el array en un objeto JSON
         exit;
     }    
 

@@ -44,7 +44,7 @@ class DataBase {
             );
 
             // Configurar charset con sentencia SQL
-            $this->connection->exec("SET NAMES " . self::CONFIG['charset']);
+            $this->connection->exec("SET client_encoding TO 'UTF8'");
             
             
             }

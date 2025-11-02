@@ -7,7 +7,7 @@ try {
 
         // transformar accion en peticion
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) { //se asegura el uso de POST y AJAX
-        $action = $_POST['action'] ?? 'registrar_producto'; //verifica si la peticion tiene una accion  post de accion distinta de registrar_producto
+        $action = $_POST['action'] ?? null; //verifica si la peticion tiene una accion  post de accion distinta de registrar_producto
         
         switch ($action) {
             case 'registrar_producto':
@@ -17,6 +17,10 @@ try {
             case 'obtener_sucursales':
                 $controller->obtenerSucursales();
                 break;
+
+            case null: // AGREGAR: Manejar cuando no hay action (submit normal)
+                $controller->registrarProducto();
+                break;                
                 
             default:
                 http_response_code(400);
@@ -29,7 +33,7 @@ try {
     }
 
 } catch (Exception $e) {
-    error_log("Error en index.php: " . $e->getMessage());
+    error_log("Error en routing.php: " . $e->getMessage());
     
     if (isset($_POST['ajax'])) {
         http_response_code(500);
