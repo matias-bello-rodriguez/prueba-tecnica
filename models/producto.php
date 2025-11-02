@@ -30,12 +30,20 @@ class ProductoModelo{
     //función que crea productos
     public function crearProducto($valores){
         try {
+
+            //A continuación haremos uso de una transacción, y ejecutaremos las funciones php como un bloque SQL, para asegurar unicidad. 
+            //haremos uso de este recurso, ya que la operación INSERT manipula directamente la BD.
+
+            // --1. inico de la transaccion a BD
+            $this->db->beginTransaction();
+
+            // --2. insertar el producto 
             $sql = "INSERT INTO productos (codigo, nombre, bodega_id, sucursal_id, moneda_id, precio, descripcion, fecha_creacion) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";          
             //consulta SQL para insertar los $valores del método        
             $stmt = $this->db->prepare($sql);
             //la consulta se ejecuta,tomando los valores del array que recibirá, usando [] para conocer los valores
-            return $stmt->execute([
+            $stmt->execute([
                 $valores['codigo'],
                 $valores['nombre'],
                 $valores['bodega_id'],
@@ -62,10 +70,17 @@ class ProductoModelo{
                 }
             }
             
+            // --3. si sale bien y no hay excepciones, confirmamos la transaccion con un commit
+
+            $this->db->commit();
             return $productoId; // devuelve el ID del producto creado            
 
 
         } catch (PDOException $errorEjecucion) {
+            // --4 si falla, revertimos la transaccion
+            //al revertir la transacción, deshacemos los cambios hechos anteriormente para no guardarlos en la bd
+            //EJ: si surge un error en la inserción de materiles, podemos deshacer la inserción de productos
+            $this->db->rollBack();
             error_log("Error al crear producto: " . $errorEjecucion->getMessage());
             throw new Exception("Error al crear el producto");
         }

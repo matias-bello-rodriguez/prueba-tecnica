@@ -81,7 +81,7 @@ class ProductoController{
                 throw new Exception("Petición no válida");
             }
             $bodegaId = filter_input(INPUT_POST, 'bodega_id', FILTER_VALIDATE_INT);//obtiene id por medio de la bodega_id del html
-            if($bodegaId){
+            if(!$bodegaId){
                 $this->enviarJson(false, "Id de bodega, no válido");
                 return;
             }
@@ -98,17 +98,21 @@ class ProductoController{
 
     //obtiene los datos del formulario, y valida si tienen los tipos de datos correctos
     private function obtenerDatosFormulario() {
+        $materiales = $_POST['materiales'] ?? []; //array de materiales
+        $materiales = array_map(fn($m) => htmlspecialchars(trim($m), ENT_QUOTES, 'UTF-8'), $materiales); //es un hashmap que desprende informacion htmlchars, se agrupa en formato de hashmaps ya que los materiales traidos del DOM son un array
+
         return [
-            'codigo' => trim(filter_input(INPUT_POST, 'codigo', FILTER_SANITIZE_STRING)),
-            'nombre' => trim(filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING)),
+            'codigo' => htmlspecialchars(trim($_POST['codigo'] ?? ''), ENT_QUOTES, 'UTF-8'),
+            'nombre' => htmlspecialchars(trim($_POST['nombre'] ?? ''), ENT_QUOTES, 'UTF-8'),
             'bodega_id' => filter_input(INPUT_POST, 'bodega_id', FILTER_VALIDATE_INT),
             'sucursal_id' => filter_input(INPUT_POST, 'sucursal_id', FILTER_VALIDATE_INT),
             'moneda_id' => filter_input(INPUT_POST, 'moneda_id', FILTER_VALIDATE_INT),
             'precio' => filter_input(INPUT_POST, 'precio', FILTER_VALIDATE_FLOAT),
-            'descripcion' => trim(filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_STRING)),
-            'materiales' => implode(',', filter_input(INPUT_POST, 'materiales', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?: [])
+            'descripcion' => htmlspecialchars(trim($_POST['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8'),
+            'materiales' => implode(',', $materiales)
         ];
-    }    
+    }
+ 
 
     //se validan los datos
     private function validarDatos($datos){
