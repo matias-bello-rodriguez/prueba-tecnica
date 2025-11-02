@@ -55,7 +55,6 @@ class DataBase {
             }
         }
 
-    // al salir del try - catch se lanza la conexión a php         
     public static function getInstance() { //asegura que haya una sola instancia para toda la app
         if (self::$instance === null) {
             self::$instance = new self();
