@@ -24,7 +24,7 @@
              <!-- este div agrupa los labels e inputs -->
              <div class="form-group">
                  <label for="codigo">Código del producto</label>
-                 <input type="text" id="codigo" name="codigo" pattern="[A-Za-z0-9]+" minlength="5" maxlength="15" placeholder="EJ: Set comedor" required> <!-- pattern estipula atributos que aceptan expresiones regulares (REGEX), aqui de A-Z y solo números; tambien minlength y maxlength que establecen una cantidad mínima y máxima de caracteres -->
+                 <input type="text" id="codigo_id" name="codigo" pattern="[A-Za-z0-9]+" minlength="5" maxlength="15" placeholder="EJ: Set comedor" required> <!-- pattern estipula atributos que aceptan expresiones regulares (REGEX), aqui de A-Z y solo números; tambien minlength y maxlength que establecen una cantidad mínima y máxima de caracteres -->
              </div>
 
             <div class="form-group">
@@ -39,7 +39,7 @@
                     <!-- select de bodega -->
                     <label for="bodega">Bodega:</label>
                     <select id="bodega_id" name="bodega" required>
-                        <option value="">--Seleccione--</option>  <!-- se define el valor vacio -->
+                        <option value="">--Seleccione--</option>  <!-- placeholder con valor deshabilitado -->
                         <!-- se realiza un stmt php para recorrer la bodega y establecer una opcion select por cada ciclo -->
                         <?php foreach($bodegas as $b): ?>
                             <option value="<?= htmlspecialchars($b['id']) ?>"><?= htmlspecialchars($b['nombre']) ?></option>
@@ -50,8 +50,8 @@
                 <div class="form-group">                
                     <!-- sucursal depende de la opción de bodega seleccionada -->
                     <label for="sucursal">Sucursal:</label>
-                    <select id="sucursal_id" name="sucursal" required>
-                        <option value="">--Seleccione--</option>
+                    <select id="sucursal_id" name="sucursal" required disabled>
+                        <option value="">--Seleccione--</option> <!-- placeholder con valor deshabilitado -->
                     </select>
                 </div>                 
             </div>
@@ -101,7 +101,7 @@
                  <textarea id="descripcion_id" name="descripcion" rows="4" placeholder="describe las características del producto" minlength="10" maxlength="1000"></textarea>
      
                  <!-- guardar el producto -->
-                 <button type="button" id="guardarProducto">Guardar Producto</button>
+                 <button id="boton_id" type="submit" id="guardarProducto">Guardar Producto</button>
      
              </form>
          </div>
