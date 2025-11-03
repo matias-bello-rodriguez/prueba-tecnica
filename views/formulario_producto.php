@@ -12,7 +12,7 @@
     <div class="container">
 
         <header>
-            <h1>Formulario de Productos</h1>
+            <h1>Formulario de Producto</h1>
         </header>
 
 
@@ -25,13 +25,13 @@
             <div class="form-row">
                 <!-- este div agrupa los labels e inputs -->
                 <div class="form-group">
-                    <label for="codigo">Código del producto</label>
+                    <label for="codigo">Código</label>
                     <input type="text" id="codigo" name="codigo" pattern="[A-Za-z0-9]+" minlength="5" maxlength="15" placeholder="EJ: Set comedor" required> <!-- pattern estipula atributos que aceptan expresiones regulares (REGEX), aqui de A-Z y solo números; tambien minlength y maxlength que establecen una cantidad mínima y máxima de caracteres -->
                 </div>
 
                 <div class="form-group">
                     <!-- nombre del producto -->
-                    <label for="nombre">Nombre del Producto:</label>
+                    <label for="nombre">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" minlength="2" maxlength="50" placeholder="EJ: PRODO1K" required>
                 </div>    
             </div>
