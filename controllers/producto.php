@@ -126,57 +126,48 @@ class ProductoController{
 
     //se validan los datos
     private function validarDatos($datos){
-        $errores = []; //los errores se guardan en formato de array
+        $errores = [];
 
         if (empty($datos['codigo'])) {
-            $errores[] = "El código es requerido";
-        } elseif (strlen($datos['codigo']) > 50) {
-            $errores[] = "El código no puede exceder 50 caracteres";
+            $errores[] = "El código del producto no puede estar en blanco.";
+        } elseif (strlen($datos['codigo']) < 5 || strlen($datos['codigo']) > 15) {
+            $errores[] = "El código del producto debe tener entre 5 y 15 caracteres.";
+        } elseif (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{5,15}$/', $datos['codigo'])) {
+            $errores[] = "El código del producto debe contener letras y números";
+        } elseif ($this->model->existeCodigoProducto($datos['codigo'])) {
+            $errores[] = "El código del producto ya está registrado.";
         }
         
         if (empty($datos['nombre'])) {
-            $errores[] = "El nombre es requerido";
-        } elseif (strlen($datos['nombre']) > 100) {
-            $errores[] = "El nombre no puede exceder 100 caracteres";
+            $errores[] = "El nombre del producto no puede estar en blanco.";
         }
         
         if (!$datos['bodega_id']) {
-            $errores[] = "Debe seleccionar una bodega";
+            $errores[] = "Debe seleccionar una bodega.";
         }
         
         if (!$datos['sucursal_id']) {
-            $errores[] = "Debe seleccionar una sucursal";
+            $errores[] = "Debe seleccionar una sucursal para la bodega seleccionada.";
         }
         
         if (!$datos['moneda_id']) {
-            $errores[] = "Debe seleccionar una moneda";
+            $errores[] = "Debe seleccionar una moneda para el producto.";
         }
         
-        if ($datos['precio'] === false || $datos['precio'] <= 0) {
-        $errores[] = "El precio debe ser un número mayor a 0";
-        } elseif ($datos['precio'] > 999999.99) {
-            $errores[] = "El precio no puede exceder 999,999.99";
+        if (empty($datos['precio']) || $datos['precio'] === false || $datos['precio'] <= 0) {
+            $errores[] = "El precio del producto no puede estar en blanco.";
         } else {
-            //validar que no tenga más de 2 decimales
-            $precioStr = (string) $datos['precio'];
-            if (strpos($precioStr, '.') !== false) {
-                $decimales = strlen(substr(strrchr($precioStr, "."), 1));
-                if ($decimales > 2) {
-                    $errores[] = "El precio no puede tener más de 2 decimales";
-                }
+            if (!preg_match('/^\d+(\.\d{1,2})?$/', (string)$datos['precio'])) {
+                $errores[] = "El precio del producto debe ser un número positivo con hasta dos decimales.";
             }
         }
         
         if (empty($datos['descripcion'])) {
-            $errores[] = "La descripción es requerida";
-        } elseif (strlen($datos['descripcion']) > 500) {
-            $errores[] = "La descripción no puede exceder 500 caracteres";
+            $errores[] = "La descripción del producto no puede estar en blanco.";
         }
         
-        if (empty($datos['materiales'])) {
-            $errores[] = "Debe seleccionar al menos 2 materiales";
-        } else if (count($datos['materiales']) < 2) {
-            $errores[] = "Debe seleccionar al menos 2 materiales";
+        if (empty($datos['materiales']) || count($datos['materiales']) < 2) {
+            $errores[] = "Debe seleccionar al menos dos materiales para el producto.";
         }
         
         return $errores;        
