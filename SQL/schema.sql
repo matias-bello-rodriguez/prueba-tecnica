@@ -77,8 +77,8 @@ INSERT INTO sucursales (nombre, bodega_id, direccion) VALUES
 
 -- Datos de ejemplo para monedas
 INSERT INTO monedas (nombre, simbolo) VALUES 
-('Peso Chileno', 'CLP'),
-('Dólar Americano', 'USD'),
+('CLP', 'CLP'),
+('DÓLAR', 'USD'),
 ('Euro', 'EUR'),
 ('Peso Argentino', 'ARS');
 
