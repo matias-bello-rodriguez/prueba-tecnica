@@ -1,8 +1,9 @@
 # Gestión de Productos
 
-<img width="1918" height="981" alt="image" src="https://github.com/user-attachments/assets/06e70e67-0d22-4f06-ae01-f337fdd2cc8b" />
-
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/06e70e67-0d22-4f06-ae01-f337fdd2cc8b" alt="Gestión de productos 1" width="45%">
+  <img src="https://github.com/user-attachments/assets/759a220d-1ff5-4dea-817c-aaf8c07cc2a6" alt="Gestión de productos 2" width="45%">
+</p>
 
 Aplicación web para registro de productos con formulario dinámico.
 
