@@ -1,5 +1,8 @@
 # Gestión de Productos
 
+<img width="1167" height="869" alt="image" src="https://github.com/user-attachments/assets/b26cbb73-eb4a-4fbf-9a0b-21a8991ec1cb" />
+
+
 Aplicación web para registro de productos con formulario dinámico.
 
 ## Requisitos
