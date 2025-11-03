@@ -1,12 +1,21 @@
 {
-    "name": "matias/gestion-productos",
+    "name": "matias/prueba-tecnica",
     "description": "Sistema de gestión de productos con PHP y PostgreSQL",
+    "type": "project",
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-pgsql": "*"
     },
     "scripts": {
+        "start": "php -S 0.0.0.0:$PORT",
         "post-install-cmd": [
-            "echo 'Instalación completada'"
+            "echo 'PHP application ready for deployment'"
         ]
+    },
+    "config": {
+        "platform": {
+            "php": "8.2"
+        }
     }
 }

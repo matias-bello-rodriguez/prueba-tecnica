@@ -212,38 +212,47 @@ php -m | grep pgsql
 
 ### 1. Preparar archivos
 
-El proyecto ya incluye `composer.json` configurado.
+El proyecto incluye:
+- `Dockerfile` - Para deployment con Docker
+- `composer.json` - Configuración PHP optimizada
+- `.dockerignore` - Optimización del build
 
 ### 2. Pasos en Render
 
-1. Crear cuenta en render.com
-2. Conectar repositorio: `https://github.com/matias-bello-rodriguez/prueba-tecnica`
-3. **Crear base de datos**:
+1. **Crear cuenta** en render.com
+2. **Crear base de datos**:
    - New → PostgreSQL
-   - Nombre: productos-db
-   - Guardar credenciales
+   - Nombre: `prueba-tecnica-db`
+   - Guardar todas las credenciales
+
+3. **Importar schema**:
+   ```bash
+   psql "postgresql://user:pass@host:port/db" < SQL/schema.sql
+   ```
+
 4. **Crear web service**:
    - New → Web Service
-   - Conectar repo
-   - Build Command: (vacío)
-   - Start Command: `php -S 0.0.0.0:$PORT`
-   - Variables de entorno:
-     ```
-     DB_HOST=<host-de-render>
-     DB_NAME=<nombre-bd>
-     DB_USER=<usuario-bd>
-     DB_PASSWORD=<password-bd>
-     ```
+   - Conectar: `https://github.com/matias-bello-rodriguez/prueba-tecnica`
+   - Environment: **Docker**
+   - Auto-deploy: **Yes**
 
-### 3. Importar datos
+5. **Variables de entorno**:
+   ```
+   DB_HOST=<render-db-host>
+   DB_NAME=prueba_tecnica
+   DB_USER=<render-db-user>
+   DB_PASSWORD=<render-db-password>
+   DB_PORT=5432
+   ```
 
-Conectar a la BD de Render y ejecutar:
+### 3. Resultado
 
-```bash
-psql <url-connection-render> < SQL/schema.sql
-```
+Tu aplicación estará disponible en: `https://tu-app.onrender.com`
 
-La app estará en: `https://tu-app.onrender.com`
+El Dockerfile se encarga automáticamente de:
+- Instalar PHP 8.2 con extensiones PostgreSQL
+- Configurar el servidor para puerto dinámico
+- Optimizar el contenedor para producción
 ```
 
 **PHP no encuentra extensión pgsql:**

@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Documentación
+README.md
+*.md
+
+# Archivos locales
+.env
+.env.local
+
+# Logs
+*.log
+
+# Cache
+.cache/
+
+# Node modules (si los hubiera)
+node_modules/
+
+# Archivos de desarrollo
+.vscode/
+.idea/
+
+# Archivos temporales
+*.tmp
+*.temp
