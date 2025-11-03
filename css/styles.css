@@ -14,7 +14,7 @@
   --text-dark: #000;
   --radius: 1rem;
   --input-radius: 0.5rem;
-  --boton-radius: 0.5rem;
+  --boton-radius: 0.45rem;
   --shadow: 
     -0.75rem 0 2rem rgba(0, 0, 0, 0.4),
     0.75rem 0 2rem rgba(0, 0, 0, 0.4),
@@ -187,7 +187,7 @@ button[type="submit"] {
   background: var(--primary-color);
   color: #fff;
   border: none;
-  padding: var(--space-md) 5rem;
+  padding: var(--space-md) 6.5rem;
   border-radius: var(--boton-radius);
   font-size: 1rem;
   font-weight: 500;
