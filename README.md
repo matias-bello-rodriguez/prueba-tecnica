@@ -1,31 +1,28 @@
-# Proyecto Gestión de Productos
+# Gestión de Productos
 
-Sistema de gestión de productos con formulario dinámico usando PHP, PostgreSQL y JavaScript modular.
+Aplicación web para registro de productos con formulario dinámico.
 
-## 📋 Requisitos del Sistema
+## Requisitos
 
-- PHP 8.0 o superior
-- PostgreSQL 12 o superior
-- Servidor web (Apache/Nginx) o PHP built-in server
-- Git
+- PHP 8.0+
+- PostgreSQL 12+
+- Navegador web moderno
 
-## 🚀 Instalación
+## Instalación
 
-### 1. Clonar el Repositorio
+### 1. Clonar proyecto
 
 ```bash
 git clone <url-del-repositorio>
 cd prueba-tecnica
 ```
 
-### 2. Instalar PostgreSQL
+### 2. Configurar PostgreSQL
 
-#### **Ubuntu/Debian**
+#### Ubuntu/Debian
 ```bash
-sudo apt update
 sudo apt install postgresql postgresql-contrib php-pgsql
 sudo systemctl start postgresql
-sudo systemctl enable postgresql
 ```
 
 #### **Fedora/CentOS/RHEL**
