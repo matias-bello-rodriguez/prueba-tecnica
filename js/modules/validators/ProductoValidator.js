@@ -27,8 +27,6 @@ export class ProductoValidator {
         const nombreCampo = field.name;
         let errorMsj = '';
 
-        console.log(`Validando ${nombreCampo}:`, `"${valor}"`);
-
         switch (nombreCampo) {
             case 'codigo':
                 const regexCodigo = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{5,15}$/;
@@ -85,8 +83,6 @@ export class ProductoValidator {
 
     static validarMateriales(form) {
         const checkboxes = form.querySelectorAll('input[name="materiales[]"]:checked');
-        
-        console.log(`Materiales seleccionados: ${checkboxes.length}`);
 
         if (checkboxes.length < 2) {
             return 'Debe seleccionar al menos 2 materiales';

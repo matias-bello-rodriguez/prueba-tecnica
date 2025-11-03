@@ -125,8 +125,6 @@ export class ProductoService {
     }
 
     static manejarError(error) {
-        console.error('Error en ProductoService:', error);
-        
         switch (error.type) {
             case 'timeout':
                 return {

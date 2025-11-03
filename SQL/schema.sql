@@ -1,6 +1,4 @@
--- Script para crear la base de datos y tablas necesarias en PostgreSQL
 -- CREATE DATABASE prueba_tecnica; -- Ejecutar por separado
--- \c prueba_tecnica; -- Conectar a la BD
 
 -- Tabla de bodegas
 CREATE TABLE IF NOT EXISTS bodegas (

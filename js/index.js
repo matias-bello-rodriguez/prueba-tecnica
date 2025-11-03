@@ -1,4 +1,4 @@
-// Controlador principal para la gestión de productos - Frontend usando AJAX
+// este archivo se ocupa de manejar la logica del frotnend usando AJAX
 import { ProductoValidator } from './modules/validators/ProductoValidator.js';
 import { ProductoService } from './modules/services/ProductoService.js';
 import { UIUtils } from './modules/utils/UIUtils.js';
@@ -7,7 +7,6 @@ import { FormUtils } from './modules/utils/FormUtils.js';
 class Producto {
 
     constructor() {
-        // elementos del DOM
         this.form = document.querySelector('form'); 
         this.btnSubmit = document.getElementById('boton');
 
@@ -18,7 +17,6 @@ class Producto {
         this.bindEvents();
     }
 
-    // relacionar eventos con funciones, manipulando el DOM
     bindEvents() {
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
 
@@ -30,12 +28,10 @@ class Producto {
             checkbox.addEventListener('change', () => this.validarMateriales())
         });
 
-        // Configurar eventos para campo precio
         const precioInput = document.getElementById('precio');
         FormUtils.configurarEventosPrecio(precioInput);
     }
 
-    // función asíncrona que maneja el submit del formulario
     async handleSubmit(e) {
         e.preventDefault();
 
@@ -65,7 +61,6 @@ class Producto {
         }
     }
 
-    // Carga las sucursales para la bodega seleccionada
     async cargarSucursales(bodegaId) {
         const sucursalSelect = document.getElementById("sucursal");
 
@@ -86,12 +81,10 @@ class Producto {
         }
     }
 
-    // Validar materiales usando el validador
     validarMateriales() {
         return ProductoValidator.validarMateriales(this.form);
     }
 
-    // Manejar errores de la aplicación
     manejarError(error) {
         const errorData = ProductoService.manejarError(error);
         
@@ -99,7 +92,6 @@ class Producto {
     }
 }
 
-// Función que crea una instancia de clase de producto al cargar el DOM 
 document.addEventListener('DOMContentLoaded', function() {
     new Producto();
 });
