@@ -111,7 +111,6 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
 }
 
 /* 🔹 Textarea */
@@ -264,6 +263,40 @@ button:disabled {
     font-weight: 700;
   }
 }
+
+
+/* estilos especiales para placeholder de textarea, ya que tiene definido una tipografia distinta a input y select */
+
+/* Placeholders con tipografía consistente con textarea */
+textarea::placeholder
+{
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #9ca3afc5;
+    opacity: 1;
+}
+
+/* Para compatibilidad con navegadores específicos */
+textarea::-webkit-input-placeholder {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #9ca3af;
+}
+
+textarea::-moz-placeholder {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #9ca3af;
+    opacity: 1;
+}
+
+textarea:-ms-input-placeholder {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #9ca3af;
+}
+
+/* ...existing code... */
 
 /* Accesibilidad */
 @media (prefers-reduced-motion: reduce) {
