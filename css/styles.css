@@ -9,7 +9,7 @@
 /* 🔹 Variables CSS */
 :root {
   --primary-color: #1aab8a;
-  --checkbox-color: #42c6f2;
+  --checkbox-color: #4c94f8;
   --bg-light: #f8f9fa;
   --text-dark: #000;
   --radius: 1rem;
@@ -47,7 +47,7 @@ body {
   background: #fff;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  border: 2px solid #000;
+  border: 1.5px solid #000;
   width: 55%;
   max-width: 65rem;
   display: grid;
@@ -122,6 +122,11 @@ textarea {
 }
 
 /* 🔹 Checkboxes */
+fieldset {
+  border: none;
+  margin: 0;
+}
+
 .checkbox-container {
   display: flex;
   flex-wrap: wrap;
@@ -231,23 +236,6 @@ button:disabled {
   to { transform: rotate(360deg); }
 }
 
-/* 🔹 Validación */
-.error {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
-}
-
-.error-message {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: var(--space-xs);
-  display: none;
-}
-
-.error-message:not(:empty) {
-  display: block;
-}
-
 /* 🔹 Responsive */
 @media (max-width: 48rem) {
   .container {
@@ -277,7 +265,7 @@ button:disabled {
   }
 }
 
-/* 🔹 Accesibilidad */
+/* Accesibilidad */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
