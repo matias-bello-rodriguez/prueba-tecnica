@@ -43,8 +43,8 @@
          
                 <div class="form-group">
                     <label for="sucursal_id">Sucursal:</label>
-                    <select id="sucursal" name="sucursal_id" required disabled>
-                        <option value="">--Previamente debe seleccionar una bodega--</option>
+                    <select id="sucursal" name="sucursal_id" required>
+                        <option value="">Seleccione una bodega previamente</option>
                     </select>
                 </div>                 
             </div>

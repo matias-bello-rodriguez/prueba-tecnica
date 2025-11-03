@@ -9,7 +9,7 @@ export class UIUtils {
         btnSubmit.classList.toggle('loading', loading);
         
         form.querySelectorAll('input, select, textarea, button').forEach(field => {
-            if (field !== btnSubmit) {
+            if (field !== btnSubmit && field.id !== 'sucursal') {
                 field.disabled = loading;
             }
         });
@@ -28,17 +28,15 @@ export class UIUtils {
         
         const sucursalSelect = document.getElementById('sucursal');
         if (sucursalSelect) {
-            sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
-            sucursalSelect.disabled = true;
+            sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
         }
     }
 
     static actualizarSucursales(sucursalSelect, data, bodegaId) {
-        sucursalSelect.innerHTML = '<option value="">--Selecciona--</option>';
-        sucursalSelect.disabled = true;
+        sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
         
         if (!bodegaId) {
-            sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
+            sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
             return;
         }
 
@@ -52,8 +50,6 @@ export class UIUtils {
                 sucursalSelect.appendChild(option);
             });
 
-            sucursalSelect.disabled = false;
-
         } else {
             sucursalSelect.innerHTML = '<option value="">--No hay sucursales disponibles--</option>';
         }
@@ -61,6 +57,5 @@ export class UIUtils {
 
     static mostrarErrorSucursales(sucursalSelect) {
         sucursalSelect.innerHTML = '<option value="">--Error al cargar sucursales--</option>';
-        sucursalSelect.disabled = true;
     }
 }
