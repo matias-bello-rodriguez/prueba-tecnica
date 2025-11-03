@@ -18,7 +18,7 @@ try {
                 $controller->obtenerSucursales();
                 break;
 
-            case null: // AGREGAR: Manejar cuando no hay action (submit normal)
+            case null: //manejar cuando no hay action (submit normal)
                 $controller->registrarProducto();
                 break;                
                 

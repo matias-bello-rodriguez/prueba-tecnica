@@ -284,8 +284,7 @@ class Producto{
         switch (nombreCampo) {
             case 'codigo':
                 // Solo letras, números, guiones y espacios, entre 5-15 caracteres
-                const regexCodigo = /^[A-Za-z0-9\-\s]{5,15}$/;
-                if (!valor) {
+                const regexCodigo = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{5,15}$/;                if (!valor) {
                     errorMsj = 'El código es requerido';
                 } else if (!regexCodigo.test(valor)) {
                     errorMsj = 'El código debe tener 5-15 caracteres (solo letras, números, espacios y guiones)';
