@@ -41,7 +41,7 @@
                     <!-- select de bodega -->
                     <label for="bodega_id">Bodega:</label>
                     <select id="bodega" name="bodega_id" required>
-                        <option value="">--Seleccione--</option>  <!-- placeholder con valor deshabilitado -->
+                        <option value="">--Seleccione Bodega--</option>  <!-- placeholder con valor deshabilitado -->
                         <!-- se realiza un stmt php para recorrer la bodega y establecer una opcion select por cada ciclo -->
                         <?php foreach($bodegas as $b): ?>
                             <option value="<?= htmlspecialchars($b['id']) ?>"><?= htmlspecialchars($b['nombre']) ?></option>
@@ -53,7 +53,7 @@
                     <!-- sucursal depende de la opción de bodega seleccionada -->
                     <label for="sucursal_id">Sucursal:</label>
                     <select id="sucursal" name="sucursal_id" required disabled>
-                        <option value="">--Seleccione--</option> <!-- placeholder con valor deshabilitado -->
+                        <option value="">--Antes seleccione Bodega--</option> <!-- placeholder con valor deshabilitado -->
                     </select>
                 </div>                 
             </div>
@@ -64,7 +64,7 @@
                     <!-- select de monedas -->
                     <label for="moneda_id">Moneda:</label>
                     <select id="moneda" name="moneda_id" required>
-                        <option value="">--Seleccione--</option>
+                        <option value="">--Seleccione Moneda--</option>
                         <!-- se realiza un stmt php para recorrer monedas y establecer una opcion select por cada ciclo -->
                         <?php foreach($monedas as $m): ?>
                             <option value="<?= htmlspecialchars($m['id']) ?>"><?= htmlspecialchars($m['nombre']) ?></option>
