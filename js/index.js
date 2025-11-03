@@ -14,7 +14,6 @@ class Producto{
 
     init(){
         this.bindEvents();
-        // Eliminada initValidacion() - validación solo en handleSubmit para evitar múltiples alertas
     }
 
     // relacionar eventos con funciones, maniulando el DOM
@@ -33,53 +32,46 @@ class Producto{
         //agregar evento para campo precio
         const precioInput = document.getElementById('precio');
         if (precioInput) {
-            // evneto cuando el usuario termina de escribir
             precioInput.addEventListener('blur', () => this.formatearPrecio(precioInput));
-            
-            // evento mientras escribe
             precioInput.addEventListener('input', () => this.limitarDecimales(precioInput));
         }
     }
 
     //funcion para dar formato de decimales
     formatearPrecio(input) {
-    let valor = parseFloat(input.value);
-    if (!isNaN(valor) && valor > 0) {
-        // formatear a máximo 2 decimales
-        input.value = valor.toFixed(2); //fijar el valor en 2 decimales
-    }
+        let valor = parseFloat(input.value);
+        if (!isNaN(valor) && valor > 0) {
+            input.value = valor.toFixed(2); //fijar el valor en 2 decimales
+        }
     }
 
     //funcion para dar límite de dos a los decimales
     limitarDecimales(input) {
-    let valor = input.value;
-    
-    // si tiene punto decimal, limitar a 2 decimales
-    if (valor.includes('.')) {
-        const partes = valor.split('.');
-        if (partes[1] && partes[1].length > 2) {
-            input.value = partes[0] + '.' + partes[1].substring(0, 2);
+        let valor = input.value;
+        
+        // si tiene punto decimal, limitar a 2 decimales
+        if (valor.includes('.')) {
+            const partes = valor.split('.');
+            if (partes[1] && partes[1].length > 2) {
+                input.value = partes[0] + '.' + partes[1].substring(0, 2);
+            }
         }
     }
-    }
 
 
-        // función asincrona que espera el submit del formulario
+    // función asincrona que espera el submit del formulario
     async handleSubmit(e){
         e.preventDefault();
 
-        // DEBUG: Solo para desarrollo - mostrar información del formulario
         this.mostrarDebugInfo();
 
-        // VALIDACIÓN: ejecutar validaciones antes de enviar
         if (!this.validarTodosLosCampos()) {
-            return; // Si hay errores, no continuar con el envío
+            return;
         }
         
         this.setLoading(true); //marcar evento como cargando
 
         try {
-            // Crear FormData con todos los datos del formulario
             const formData = this.crearFormData();
 
             const response = await fetch('index.php',{
@@ -145,7 +137,6 @@ class Producto{
         return formData;
     }
 
-    // método auxiliar para mostrar información de debug (solo para desarrollo)
     mostrarDebugInfo(){
         console.log('=== DIAGNÓSTICO COMPLETO ===');
         
@@ -292,7 +283,7 @@ class Producto{
         // hacemos un switch para resolver cada atributo dependiendo del tipo
         switch (nombreCampo) {
             case 'codigo':
-                // REGEX: Solo letras, números, guiones y espacios, entre 5-15 caracteres
+                // Solo letras, números, guiones y espacios, entre 5-15 caracteres
                 const regexCodigo = /^[A-Za-z0-9\-\s]{5,15}$/;
                 if (!valor) {
                     errorMsj = 'El código es requerido';
@@ -302,7 +293,7 @@ class Producto{
                 break;
                 
             case 'nombre':
-                // REGEX: Solo letras, espacios, tildes, ñ, guiones y puntos, entre 2-50 caracteres
+                // Solo letras, espacios, tildes, ñ, guiones y puntos, entre 2-50 caracteres
                 const regexNombre = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s\-\.]{2,50}$/;
                 if (!valor) {
                     errorMsj = 'El nombre es requerido';
@@ -322,7 +313,7 @@ class Producto{
                 break;
                 
             case 'precio':
-                // REGEX: Números decimales positivos con MÁXIMO 2 decimales
+                // Números decimales positivos con MÁXIMO 2 decimales
                 const regexPrecio = /^(\d+|\d+\.\d{1,2})$/;
                 if (!valor) {
                     errorMsj = 'El precio es requerido';
@@ -336,7 +327,7 @@ class Producto{
                 break;
                 
             case 'descripcion':
-                // REGEX: Cualquier carácter incluyendo saltos de línea, entre 10-1000 caracteres
+                // Cualquier carácter incluyendo saltos de línea, entre 10-1000 caracteres
                 const regexDescripcion = /^.{10,1000}$/s;
                 if (!valor) {
                     errorMsj = 'La descripción es requerida';
@@ -389,24 +380,24 @@ class Producto{
 
     //funcion que resetea el formulario
     resetForm() {
-    this.form.reset();
-    
-    // Limpiar errores
-    this.form.querySelectorAll('.error-message').forEach(error => {
-        error.style.display = 'none';
-    });
-    
-    // Limpiar clases de error
-    this.form.querySelectorAll('.error').forEach(field => {
-        field.classList.remove('error');
-    });
-    
-    // Resetear sucursales
-    const sucursalSelect = document.getElementById('sucursal');
-    if (sucursalSelect) {
-        sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
-        sucursalSelect.disabled = true;
-    }
+        this.form.reset();
+        
+        // Limpiar errores
+        this.form.querySelectorAll('.error-message').forEach(error => {
+            error.style.display = 'none';
+        });
+        
+        // Limpiar clases de error
+        this.form.querySelectorAll('.error').forEach(field => {
+            field.classList.remove('error');
+        });
+        
+        // Resetear sucursales
+        const sucursalSelect = document.getElementById('sucursal');
+        if (sucursalSelect) {
+            sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
+            sucursalSelect.disabled = true;
+        }
     }
     
 }    
