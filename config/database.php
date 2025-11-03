@@ -6,21 +6,32 @@ class Database {
     private $database;
     private $username;
     private $password;
+    private $port;
     private $conexion;
 
     public function __construct() {
-        $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
-        $this->database = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'prueba_tecnica';
-        $this->username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'postgres';
-        $this->password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: 'rayen123';
+        // Prioridad: getenv() > $_ENV > valores por defecto
+        $this->host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? 'localhost');
+        $this->database = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'prueba_tecnica');
+        $this->username = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? 'postgres');
+        $this->password = getenv('DB_PASSWORD') ?: ($_ENV['DB_PASSWORD'] ?? 'rayen123');
+        $this->port = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? '5432');
+        
+        // Debug para verificar variables en Render (solo en desarrollo)
+        if (getenv('DEBUG_MODE') === 'true') {
+            error_log("DB_HOST: " . $this->host);
+            error_log("DB_NAME: " . $this->database);
+            error_log("DB_USER: " . $this->username);
+        }
     }
 
     public function getConnection() {
         $this->conexion = null;
 
         try {
+            $dsn = "pgsql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->database;
             $this->conexion = new PDO(
-                "pgsql:host=" . $this->host . ";dbname=" . $this->database,
+                $dsn,
                 $this->username,
                 $this->password,
                 [
@@ -31,6 +42,7 @@ class Database {
             );
         } catch(PDOException $exception) {
             error_log("Error de conexión: " . $exception->getMessage());
+            error_log("DSN usado: pgsql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->database);
             throw new Exception("Error de conexión a la base de datos");
         }
 
