@@ -118,13 +118,27 @@ class ProductoModelo{
 
     //función para obtener todos los valores de materiales desde la BD
     public function obtenerMateriales() {
-        try {
-            $stmt = $this->db->query("SELECT id, nombre FROM materiales ORDER BY nombre");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error al obtener materiales: " . $e->getMessage());
-            return [];
-        }
+    try {
+        $stmt = $this->db->query("
+            SELECT id, nombre 
+            FROM materiales 
+            ORDER BY 
+                CASE LOWER(nombre)
+                    WHEN 'plastico' THEN 1
+                    WHEN 'plástico' THEN 1
+                    WHEN 'metal' THEN 2
+                    WHEN 'madera' THEN 3
+                    WHEN 'vidrio' THEN 4
+                    WHEN 'textil' THEN 5
+                    ELSE 6
+                END,
+                nombre
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Error al obtener materiales: " . $e->getMessage());
+        return [];
+    }
     }
 
 }
