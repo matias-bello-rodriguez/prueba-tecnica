@@ -207,16 +207,3 @@ sudo service apache2 restart
 
 # Verificar
 php -m | grep pgsql
-```
-├── views/
-│   └── formulario_producto.php  # Vista del formulario
-├── js/
-│   ├── index.js             # Controlador JS principal
-│   └── modules/             # Módulos JavaScript
-├── css/
-│   └── styles.css           # Estilos
-├── SQL/
-│   └── schema.sql           # Schema de la base de datos
-├── .env                     # Variables de entorno (crear)
-└── index.php               # Punto de entrada
-```
