@@ -37,8 +37,8 @@ class ProductoModelo{
             $this->db->beginTransaction();
 
             // --2. insertar el producto (sin campo materiales, ahora usa tabla intersección)
-            $sql = "INSERT INTO productos (codigo, nombre, bodega_id, sucursal_id, moneda_id, precio, descripcion, fecha_creacion) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, NOW()) RETURNING id"; //PostgreSQL usa RETURNING id en lugar de lastInsertId()
+            $sql = "INSERT INTO productos (codigo, nombre, bodega_id, sucursal_id, moneda_id, precio, descripcion) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"; //PostgreSQL usa RETURNING id en lugar de lastInsertId()
             
             $stmt = $this->db->prepare($sql);
             //la consulta se ejecuta,tomando los valores del array que recibirá, usando [] para conocer los valores
