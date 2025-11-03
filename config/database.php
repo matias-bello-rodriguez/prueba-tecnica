@@ -2,11 +2,18 @@
 
 class Database {
     
-    private $host = 'localhost';
-    private $database = 'prueba_tecnica';
-    private $username = 'postgres';
-    private $password = 'rayen123';
+    private $host;
+    private $database;
+    private $username;
+    private $password;
     private $conexion;
+
+    public function __construct() {
+        $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
+        $this->database = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'prueba_tecnica';
+        $this->username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'postgres';
+        $this->password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: 'rayen123';
+    }
 
     public function getConnection() {
         $this->conexion = null;

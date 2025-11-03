@@ -1,0 +1,12 @@
+{
+    "name": "matias/gestion-productos",
+    "description": "Sistema de gestión de productos con PHP y PostgreSQL",
+    "require": {
+        "php": ">=8.0"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "echo 'Instalación completada'"
+        ]
+    }
+}
