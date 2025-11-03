@@ -183,17 +183,32 @@ class ProductoController{
 
     //enviar excepción usando formato JSON 
     private function enviarJson($success, $message, $data = null) {
-        header('Content-Type: application/json; charset=utf-8'); //el header estipula la respuesta HTTP 
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-cache, must-revalidate');
+        
         $response = [
             'success' => $success,
-            'message' => $message
-        ]; //respuesta en forma de array
+            'message' => $message,
+            'timestamp' => date('Y-m-d H:i:s')
+        ];
         
         if ($data !== null) {
             $response['data'] = $data;
-        } //si hay datos adicional succes o message, se despliega la infromación adicional en la variable $data
+        }
         
-        echo json_encode($response, JSON_UNESCAPED_UNICODE); //la función transforma el array en un objeto JSON
+        $json = json_encode($response, JSON_UNESCAPED_UNICODE);
+        
+        if ($json === false) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al codificar JSON']);
+        } else {
+            echo $json;
+        }
+        
         exit;
     }    
 
