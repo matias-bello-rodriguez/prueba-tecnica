@@ -28,20 +28,20 @@ export class UIUtils {
         
         const sucursalSelect = document.getElementById('sucursal');
         if (sucursalSelect) {
-            sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
+            sucursalSelect.innerHTML = '<option value=""></option>';
         }
     }
 
     static actualizarSucursales(sucursalSelect, data, bodegaId) {
-        sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
+        sucursalSelect.innerHTML = '<option value=""></option>';
         
         if (!bodegaId) {
-            sucursalSelect.innerHTML = '<option value="">Seleccione una bodega previamente</option>';
+            sucursalSelect.innerHTML = '<option value=""></option>';
             return;
         }
 
         if (data.success && data.data) {
-            sucursalSelect.innerHTML = '<option value="">--Seleccione una sucursal--</option>';
+            sucursalSelect.innerHTML = '<option value="">----</option>';
 
             data.data.forEach(sucursal => {
                 const option = document.createElement('option');
