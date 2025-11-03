@@ -1,7 +1,7 @@
 # Gestión de Productos
 
 <p align="center">
-<img width="1918" height="993" alt="image" src="https://github.com/user-attachments/assets/d081d555-d5f8-48bb-940c-164606a487c2" width="45%" />
+  <img src="https://github.com/user-attachments/assets/d081d555-d5f8-48bb-940c-164606a487c2"  alt="Gestión de productos 1" width="45%" />
   <img src="https://github.com/user-attachments/assets/759a220d-1ff5-4dea-817c-aaf8c07cc2a6" alt="Gestión de productos 2" width="45%">
 </p>
 
