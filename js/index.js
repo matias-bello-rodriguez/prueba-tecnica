@@ -29,7 +29,38 @@ class Producto{
         this.form.querySelectorAll('input[name="materiales[]"]').forEach(checkbox => {
             checkbox.addEventListener('change', () => this.validarMateriales())
         });//listener para disparar la funcion validarMateriales
+
+        //agregar evento para campo precio
+        const precioInput = document.getElementById('precio');
+        if (precioInput) {
+            // evneto cuando el usuario termina de escribir
+            precioInput.addEventListener('blur', () => this.formatearPrecio(precioInput));
+            
+            // evento mientras escribe
+            precioInput.addEventListener('input', () => this.limitarDecimales(precioInput));
+        }
+    }
+
+    //funcion para dar formato de decimales
+    formatearPrecio(input) {
+    let valor = parseFloat(input.value);
+    if (!isNaN(valor) && valor > 0) {
+        // formatear a máximo 2 decimales
+        input.value = valor.toFixed(2); //fijar el valor en 2 decimales
+    }
+    }
+
+    //funcion para dar límite de dos a los decimales
+    limitarDecimales(input) {
+    let valor = input.value;
     
+    // si tiene punto decimal, limitar a 2 decimales
+    if (valor.includes('.')) {
+        const partes = valor.split('.');
+        if (partes[1] && partes[1].length > 2) {
+            input.value = partes[0] + '.' + partes[1].substring(0, 2);
+        }
+    }
     }
 
 
@@ -291,14 +322,16 @@ class Producto{
                 break;
                 
             case 'precio':
-                // REGEX: Números decimales positivos con hasta 2 decimales
-                const regexPrecio = /^\d+(\.\d{1,2})?$/;
+                // REGEX: Números decimales positivos con MÁXIMO 2 decimales
+                const regexPrecio = /^(\d+|\d+\.\d{1,2})$/;
                 if (!valor) {
                     errorMsj = 'El precio es requerido';
                 } else if (!regexPrecio.test(valor)) {
-                    errorMsj = 'El precio debe ser un número válido (ejemplo: 123.45, máximo 2 decimales)';
+                    errorMsj = 'El precio debe ser un número válido con máximo 2 decimales (ejemplo: 123.45)';
                 } else if (parseFloat(valor) <= 0) {
                     errorMsj = 'El precio debe ser mayor a 0';
+                } else if (parseFloat(valor) > 999999.99) {
+                    errorMsj = 'El precio no puede exceder 999,999.99';
                 }
                 break;
                 
@@ -382,5 +415,5 @@ class Producto{
 document.addEventListener('DOMContentLoaded', function() {
     new Producto();
 });
-    
+
 

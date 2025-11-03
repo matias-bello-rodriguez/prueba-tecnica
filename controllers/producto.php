@@ -153,7 +153,18 @@ class ProductoController{
         }
         
         if ($datos['precio'] === false || $datos['precio'] <= 0) {
-            $errores[] = "El precio debe ser un número mayor a 0";
+        $errores[] = "El precio debe ser un número mayor a 0";
+        } elseif ($datos['precio'] > 999999.99) {
+            $errores[] = "El precio no puede exceder 999,999.99";
+        } else {
+            //validar que no tenga más de 2 decimales
+            $precioStr = (string) $datos['precio'];
+            if (strpos($precioStr, '.') !== false) {
+                $decimales = strlen(substr(strrchr($precioStr, "."), 1));
+                if ($decimales > 2) {
+                    $errores[] = "El precio no puede tener más de 2 decimales";
+                }
+            }
         }
         
         if (empty($datos['descripcion'])) {
