@@ -53,7 +53,7 @@
                     <!-- sucursal depende de la opción de bodega seleccionada -->
                     <label for="sucursal_id">Sucursal:</label>
                     <select id="sucursal" name="sucursal_id" required disabled>
-                        <option value="">--Antes seleccione Bodega--</option> <!-- placeholder con valor deshabilitado -->
+                        <option value="">--Previamente debe seleccionar una bodega--</option> <!-- placeholder con valor deshabilitado -->
                     </select>
                 </div>                 
             </div>

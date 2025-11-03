@@ -161,14 +161,14 @@ class Producto{
         const sucursalSelect = document.getElementById("sucursal"); //traer el valor de sucursalID
 
         //se toma el html del select de sucursal
-        sucursalSelect.innerHTML = '<option value="">--Seleccione--</option>'
+        sucursalSelect.innerHTML = '<option value="">--Selecciona--</option>'
         
         //se deshabilita la opción de placeholder
         sucursalSelect.disabled = true;
         
         // si no existe un atributo de bodegaId, el select no queda accesible
         if(!bodegaId){
-            sucursalSelect.innerHTML = '<option value="">--Primero seleccione una bodega--</option>';
+            sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
             return;
         }
 
@@ -369,7 +369,7 @@ class Producto{
     // Resetear sucursales
     const sucursalSelect = document.getElementById('sucursal');
     if (sucursalSelect) {
-        sucursalSelect.innerHTML = '<option value="">--Primero seleccione una bodega--</option>';
+        sucursalSelect.innerHTML = '<option value="">--Previamente debe seleccionar una bodega--</option>';
         sucursalSelect.disabled = true;
     }
     }
