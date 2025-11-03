@@ -253,6 +253,88 @@ El Dockerfile se encarga automáticamente de:
 - Instalar PHP 8.2 con extensiones PostgreSQL
 - Configurar el servidor para puerto dinámico
 - Optimizar el contenedor para producción
+
+## Gestión de Base de Datos con pgAdmin
+
+### 1. Instalar pgAdmin
+
+**Windows/macOS:**
+- Descargar desde: https://www.pgadmin.org/download/
+
+**Ubuntu/Debian:**
+```bash
+sudo apt install pgadmin4
+```
+
+**Fedora:**
+```bash
+sudo dnf install pgadmin4
+```
+
+### 2. Configurar conexión a Render
+
+1. **Abrir pgAdmin**
+2. **Click derecho en "Servers"** → **Create** → **Server**
+3. **Configurar conexión:**
+
+**Pestaña "General":**
+- Name: `Render - Prueba Técnica`
+
+**Pestaña "Connection":**
+- Host: `dpg-abc123-a.oregon-postgres.render.com` (tu host de Render)
+- Port: `5432`
+- Maintenance database: `tu_nombre_bd` (ej: prueba_tecnica_1644)
+- Username: `tu_usuario` (ej: pgres)
+- Password: `tu_password_render`
+
+4. **Save** y conectar
+
+### 3. Operaciones comunes
+
+**Ver datos:**
+- Expandir servidor → Databases → tu_bd → Schemas → public → Tables
+- Click derecho en tabla → **View/Edit Data** → **All Rows**
+
+**Ejecutar consultas:**
+- Click derecho en BD → **Query Tool**
+- Escribir SQL y ejecutar
+
+**Importar schema:**
+```sql
+-- En Query Tool, pegar contenido de SQL/schema.sql
+```
+
+**Resetear BD:**
+```sql
+DROP TABLE IF EXISTS producto_material CASCADE;
+DROP TABLE IF EXISTS productos CASCADE;
+DROP TABLE IF EXISTS sucursales CASCADE;
+DROP TABLE IF EXISTS bodegas CASCADE;
+DROP TABLE IF EXISTS monedas CASCADE;
+DROP TABLE IF EXISTS materiales CASCADE;
+```
+
+### 4. Comandos útiles
+
+**Ver estructura:**
+```sql
+-- Listar tablas
+SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+
+-- Contar registros
+SELECT 'productos' as tabla, COUNT(*) FROM productos
+UNION ALL
+SELECT 'bodegas', COUNT(*) FROM bodegas;
+```
+
+**Backup desde pgAdmin:**
+- Click derecho en BD → **Backup**
+- Formato: Plain
+- Guardar como `backup.sql`
+
+**Restore:**
+- Click derecho en BD → **Restore**
+- Seleccionar archivo `backup.sql`
 ```
 
 **PHP no encuentra extensión pgsql:**

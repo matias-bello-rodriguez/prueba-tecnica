@@ -70,12 +70,13 @@ INSERT INTO sucursales (nombre, bodega_id) VALUES
 INSERT INTO monedas (nombre) VALUES 
 ('CLP'),
 ('DÓLAR'),
-('Euro'),
-('Peso Argentino');
+('EURO'),
+('MXN');
 
 -- Datos de ejemplo para materiales
 INSERT INTO materiales (nombre) VALUES 
 ('Madera'),
 ('Metal'),
 ('Plástico'),
-('Vidrio');
+('Vidrio'),
+('Textil');
