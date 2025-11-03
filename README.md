@@ -180,14 +180,6 @@ Abrir http://localhost:8015 en el navegador.
 └── routing.php             # Rutas
 ```
 
-## Funcionalidades
-
-- Registro de productos con validación
-- Selección dinámica bodega/sucursal
-- Múltiples materiales por producto
-- Formulario responsive
-- Validación cliente y servidor
-
 ## Problemas comunes
 
 **Error de conexión PostgreSQL:**
