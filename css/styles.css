@@ -113,6 +113,44 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(26, 171, 138, 0.15);
+}
+
+/* Estilo para elementos activos/seleccionados */
+input:active,
+select:active,
+textarea:active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(26, 171, 138, 0.25);
+}
+
+/* Estilo para cuando se está escribiendo/seleccionando */
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  background-color: rgba(26, 171, 138, 0.02);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(26, 171, 138, 0.15);
+}
+
+/* Hover effects para inputs y selects */
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover,
+textarea:hover {
+  border-color: #148a6e;
+  box-shadow: 0 0 0 1px rgba(26, 171, 138, 0.1);
+}
+
+/* Estados combinados: hover + focus */
+input[type="text"]:hover:focus,
+input[type="number"]:hover:focus,
+select:hover:focus,
+textarea:hover:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(26, 171, 138, 0.2);
 }
 
 
@@ -120,6 +158,30 @@ textarea {
   resize: vertical;
   min-height: 4rem;
   max-height: 8rem;
+}
+
+/* Estados de selección especiales */
+select:focus option:checked,
+select option:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Indicador visual cuando hay texto seleccionado */
+input[type="text"]::selection,
+textarea::selection {
+  background-color: rgba(26, 171, 138, 0.3);
+  color: var(--text-dark);
+}
+
+/* Estado disabled */
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 

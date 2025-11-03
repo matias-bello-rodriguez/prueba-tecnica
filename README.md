@@ -53,49 +53,35 @@ brew services start postgresql
 brew install php@8.2-pgsql  # o la versión de PHP que uses
 ```
 
-#### **Windows 11**
-1. Descargar PostgreSQL desde: https://www.postgresql.org/download/windows/
-2. Ejecutar el instalador y seguir el asistente
-3. Anotar la contraseña del usuario `postgres`
-4. Descargar PHP desde: https://www.php.net/downloads.php
-5. Asegurar que la extensión `pgsql` esté habilitada en `php.ini`
+#### Windows 11
+1. Descargar PostgreSQL: https://www.postgresql.org/download/windows/
+2. Instalar siguiendo el asistente
+3. Anotar contraseña del usuario `postgres`
+4. Instalar PHP: https://www.php.net/downloads.php
+5. Habilitar extensión `pgsql` en `php.ini`
 
-### 3. Configurar PostgreSQL
-
-#### Crear usuario y base de datos:
+### 3. Base de datos
 
 ```bash
-# Conectar como superusuario postgres
+# Conectar a PostgreSQL
 sudo -u postgres psql
 
-# Dentro de PostgreSQL:
+# Crear base de datos
 CREATE DATABASE prueba_tecnica;
 CREATE USER tu_usuario WITH PASSWORD 'tu_password';
 GRANT ALL PRIVILEGES ON DATABASE prueba_tecnica TO tu_usuario;
 \q
 ```
 
-### 4. Ejecutar el Schema de Base de Datos
+### 4. Importar schema
 
-```bash
-# Conectar a PostgreSQL
-psql -U tu_usuario -d prueba_tecnica
-
-# Ejecutar el script
-\i /ruta/completa/al/proyecto/SQL/schema.sql
-
-# Salir
-\q
-```
-
-**Alternativa desde terminal:**
 ```bash
 psql -U tu_usuario -d prueba_tecnica -f SQL/schema.sql
 ```
 
-### 5. Configurar Variables de Entorno
+### 5. Configuración
 
-Crear archivo `.env` en la raíz del proyecto:
+Crear `.env` basado en `.env.example`:
 
 ```env
 # Configuración de Base de Datos
@@ -111,8 +97,22 @@ DEBUG_MODE=false
 
 # IMPORTANTE: 
 # - Cambiar DB_USER por tu usuario de PostgreSQL
-# - Cambiar DB_PASSWORD por tu contraseña
-# - Verificar que DB_HOST y DB_PORT sean correctos
+```
+
+Editar valores en `config/database.php`:
+
+```php
+private $username = 'tu_usuario';    // cambiar aquí
+private $password = 'tu_password';   // cambiar aquí
+```
+
+### 6. Iniciar servidor
+
+```bash
+php -S localhost:8015
+```
+
+Abrir http://localhost:8015 en el navegador.
 ```
 
 **⚠️ IMPORTANTE:** Debes modificar las siguientes variables:
@@ -166,56 +166,51 @@ extension=json
 extension=mbstring
 ```
 
-### 8. Ejecutar el Proyecto
+Abrir http://localhost:8015 en el navegador.
 
-#### Servidor PHP Built-in (Recomendado para desarrollo):
-```bash
-cd /ruta/al/proyecto
-php -S localhost:8015
+## Estructura del proyecto
+
+```
+├── config/database.php      # Conexión BD
+├── controllers/producto.php # Lógica del formulario
+├── models/producto.php      # Modelo de datos
+├── views/formulario_producto.php # Vista del form
+├── js/                      # JavaScript modular
+│   ├── index.js            # Controlador principal
+│   └── modules/            # Módulos ES6
+├── css/styles.css          # Estilos
+├── SQL/schema.sql          # Base de datos
+└── routing.php             # Rutas
 ```
 
-#### Con Apache/Nginx:
-- Configurar virtual host apuntando a la carpeta del proyecto
-- Asegurar que `index.php` sea el archivo de entrada
+## Funcionalidades
 
-### 9. Acceder a la Aplicación
+- Registro de productos con validación
+- Selección dinámica bodega/sucursal
+- Múltiples materiales por producto
+- Formulario responsive
+- Validación cliente y servidor
 
-Abrir navegador en: `http://localhost:8015`
+## Problemas comunes
 
-## 🔧 Verificación de Instalación
-
-### Verificar PostgreSQL:
+**Error de conexión PostgreSQL:**
 ```bash
-psql -U tu_usuario -d prueba_tecnica -c "SELECT * FROM materiales;"
+# Verificar que PostgreSQL esté corriendo
+sudo systemctl status postgresql
+
+# Verificar permisos de usuario
+sudo -u postgres psql -c "\du"
 ```
 
-### Verificar PHP Extensions:
+**PHP no encuentra extensión pgsql:**
 ```bash
+# Ubuntu/Debian
+sudo apt install php-pgsql
+sudo service apache2 restart
+
+# Verificar
 php -m | grep pgsql
 ```
-
-### Verificar Datos de Prueba:
-```sql
--- Conectar a la BD y ejecutar:
-SELECT 'Bodegas:' as tabla, count(*) as registros FROM bodegas
-UNION ALL
-SELECT 'Sucursales:', count(*) FROM sucursales  
-UNION ALL
-SELECT 'Monedas:', count(*) FROM monedas
-UNION ALL
-SELECT 'Materiales:', count(*) FROM materiales;
-```
-
-## 📁 Estructura del Proyecto
-
-```
-prueba-tecnica/
-├── config/
-│   └── database.php          # Configuración de BD
-├── controllers/
-│   └── producto.php          # Controlador principal
-├── models/
-│   └── producto.php          # Modelo de datos
 ├── views/
 │   └── formulario_producto.php  # Vista del formulario
 ├── js/
@@ -228,27 +223,3 @@ prueba-tecnica/
 ├── .env                     # Variables de entorno (crear)
 └── index.php               # Punto de entrada
 ```
-
-## 🐛 Solución de Problemas
-
-### Error de conexión a PostgreSQL:
-1. Verificar que PostgreSQL esté corriendo: `sudo systemctl status postgresql`
-2. Verificar credenciales en `config/database.php`
-3. Verificar que el usuario tenga permisos en la BD
-
-### Error 500 en PHP:
-1. Verificar logs: `tail -f /var/log/apache2/error.log`
-2. Verificar extensiones PHP: `php -m | grep pgsql`
-3. Verificar permisos de archivos
-
-### JavaScript no funciona:
-1. Verificar que el navegador soporte ES6 modules
-2. Abrir Developer Tools para ver errores en consola
-3. Verificar que los archivos JS estén en las rutas correctas
-
-## 📝 Notas Adicionales
-
-- El proyecto usa **ES6 modules**, requiere navegadores modernos
-- Para **producción**, configurar un servidor web apropiado
-- Los **logs de PHP** se guardan según la configuración del servidor
-- La aplicación usa **transacciones PostgreSQL** para integridad de datos
