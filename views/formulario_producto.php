@@ -26,13 +26,13 @@
                 <!-- este div agrupa los labels e inputs -->
                 <div class="form-group">
                     <label for="codigo">Código</label>
-                    <input type="text" id="codigo" name="codigo" pattern="[A-Za-z0-9]+" minlength="5" maxlength="15" placeholder="EJ: Set comedor" required> <!-- pattern estipula atributos que aceptan expresiones regulares (REGEX), aqui de A-Z y solo números; tambien minlength y maxlength que establecen una cantidad mínima y máxima de caracteres -->
+                    <input type="text" id="codigo" name="codigo" pattern="[A-Za-z0-9]+" minlength="5" maxlength="15" placeholder="Ej: PRODO1K" required> <!-- pattern estipula atributos que aceptan expresiones regulares (REGEX), aqui de A-Z y solo números; tambien minlength y maxlength que establecen una cantidad mínima y máxima de caracteres -->
                 </div>
 
                 <div class="form-group">
                     <!-- nombre del producto -->
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" minlength="2" maxlength="50" placeholder="EJ: PRODO1K" required>
+                    <input type="text" id="nombre" name="nombre" minlength="2" maxlength="50" placeholder="Ej: Set comedor" required>
                 </div>    
             </div>
 
@@ -74,7 +74,7 @@
                 
                 <div class="form-group">
                     <label for="precio">Precio:</label>
-                    <input type="number" id="precio" name="precio" step="0.01" min="0.01" required> <!-- step permite dos decimales y un salto de una centena; min establece que el valor mínimo es 0.01, es decir, no permite 0 ni números negativos-->
+                    <input type="number" id="precio" name="precio" step="0.01" min="0.01" placeholder="Ej: 15.22"> <!-- step permite dos decimales y un salto de una centena; min establece que el valor mínimo es 0.01, es decir, no permite 0 ni números negativos-->
                 </div>
             </div>
      
@@ -93,8 +93,8 @@
      
             <div class="form-group">
                 <!-- descripcion del producto -->
-                <label for="descripcion">Descripción del Producto:</label>
-                <textarea id="descripcion" name="descripcion" rows="4" placeholder="describe las características del producto" minlength="10" maxlength="1000" required></textarea>
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describa las características del producto." minlength="10" maxlength="1000" required></textarea>
             </div>
                  <!-- guardar el producto -->
                  <button id="boton" type="submit">Guardar Producto</button>
