@@ -21,12 +21,12 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="codigo">Código</label>
-                    <input type="text" id="codigo" name="codigo" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{5,15}$" minlength="5" maxlength="15" placeholder="Ej: PRODO1K" required>
+                    <input type="text" id="codigo" name="codigo" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{5,15}$" minlength="5" maxlength="15" placeholder="" required>
                 </div>
 
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" minlength="2" maxlength="50" placeholder="Ej: Set comedor" required>
+                    <input type="text" id="nombre" name="nombre" minlength="2" maxlength="50" placeholder="" required>
                 </div>    
             </div>
 
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="bodega_id">Bodega:</label>
                     <select id="bodega" name="bodega_id" required>
-                        <option value="">--Seleccione Bodega--</option>
+                        <option value=""></option>
                         <?php foreach($bodegas as $b): ?>
                             <option value="<?= htmlspecialchars($b['id']) ?>"><?= htmlspecialchars($b['nombre']) ?></option>
                         <?php endforeach; ?>
@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="sucursal_id">Sucursal:</label>
                     <select id="sucursal" name="sucursal_id" required>
-                        <option value="">Seleccione una bodega previamente</option>
+                        <option value=""></option>
                     </select>
                 </div>                 
             </div>
@@ -54,7 +54,7 @@
                 <div class="form-group">
                     <label for="moneda_id">Moneda:</label>
                     <select id="moneda" name="moneda_id" required>
-                        <option value="">--Seleccione Moneda--</option>
+                        <option value=""></option>
                         <?php foreach($monedas as $m): ?>
                             <option value="<?= htmlspecialchars($m['id']) ?>"><?= htmlspecialchars($m['nombre']) ?></option>
                         <?php endforeach; ?>
@@ -63,7 +63,7 @@
                 
                 <div class="form-group">
                     <label for="precio">Precio:</label>
-                    <input type="number" id="precio" name="precio" step="0.01" min="0.01" placeholder="Ej: 15.22" required>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0.01" placeholder="" required>
                 </div>
             </div>
      
@@ -80,7 +80,7 @@
      
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describa las características del producto." minlength="10" maxlength="1000" required></textarea>
+                <textarea id="descripcion" name="descripcion" rows="4" placeholder="" minlength="10" maxlength="1000" required></textarea>
             </div>
                  <button id="boton" type="submit">Guardar Producto</button>
      

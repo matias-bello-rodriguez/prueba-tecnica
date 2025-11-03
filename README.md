@@ -1,102 +1,210 @@
-# Gestión de Productos
+# Sistema de Registro de Productos
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/d081d555-d5f8-48bb-940c-164606a487c2"  alt="Gestión de productos 1" width="45%" />
-  <img src="https://github.com/user-attachments/assets/759a220d-1ff5-4dea-817c-aaf8c07cc2a6" alt="Gestión de productos 2" width="45%">
-</p>
+Sistema web para registro y gestión de productos desarrollado según especificaciones técnicas de prueba de diagnóstico.
 
+## Descripción del Proyecto
 
-Aplicación web para registro de productos con formulario dinámico.
+Sistema de registro de productos que permite validar y guardar datos del formulario en base de datos PostgreSQL. Desarrollado con tecnologías nativas según requerimientos técnicos específicos.
 
-## Requisitos
+## Tecnologías Utilizadas
 
-- PHP 8.0+
-- PostgreSQL 12+
-- Navegador web moderno
+- **HTML**: Estructuras estándar para interfaz de usuario
+- **CSS**: Estilos nativos sin frameworks (sin Bootstrap ni Tailwind)
+- **PHP**: Desarrollo backend sin frameworks
+- **JavaScript**: Funciones nativas y AJAX para conectividad
+- **PostgreSQL**: Gestor de base de datos
 
-## Instalación
+## Versiones Requeridas
 
-### 1. Clonar proyecto
+- **PHP**: 8.2 o superior
+- **PostgreSQL**: 12 o superior
+- **Navegador**: Moderno con soporte ES6
+
+## Pasos para Instalar el Proyecto
+
+### 1. Clonar el Repositorio
 
 ```bash
 git clone https://github.com/matias-bello-rodriguez/prueba-tecnica.git
 cd prueba-tecnica
 ```
 
-### 2. Configurar PostgreSQL
+### 2. Configurar el Servidor Web
 
-#### Ubuntu/Debian
+#### Para Ubuntu/Debian:
 ```bash
-sudo apt install postgresql postgresql-contrib php-pgsql
-sudo systemctl start postgresql
+sudo apt update
+sudo apt install apache2 php8.2 php8.2-pgsql postgresql postgresql-contrib
+sudo systemctl start apache2
+sudo systemctl enable apache2
 ```
 
-#### **Fedora/CentOS/RHEL**
+#### Para Fedora/RHEL:
 ```bash
-# Fedora
-sudo dnf install postgresql postgresql-server php-pgsql
-sudo postgresql-setup --initdb
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-
-# CentOS/RHEL
-sudo yum install postgresql postgresql-server php-pgsql
-sudo postgresql-setup initdb
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
+sudo dnf install httpd php php-pgsql postgresql postgresql-server
+sudo systemctl start httpd
+sudo systemctl enable httpd
 ```
 
-#### **macOS**
+#### Para macOS (con Homebrew):
 ```bash
 # Usando Homebrew
 brew install postgresql php
 brew services start postgresql
-
-# Instalar extensión PHP PostgreSQL
-brew install php@8.2-pgsql  # o la versión de PHP que uses
 ```
 
-#### Windows 11
-1. Descargar PostgreSQL: https://www.postgresql.org/download/windows/
-2. Instalar siguiendo el asistente
-3. Anotar contraseña del usuario `postgres`
-4. Instalar PHP: https://www.php.net/downloads.php
-5. Habilitar extensión `pgsql` en `php.ini`
+#### Para Windows:
+1. Descargar PostgreSQL desde: https://www.postgresql.org/download/windows/
+2. Instalar siguiendo el asistente de instalación
+3. Anotar la contraseña del usuario `postgres`
+4. Descargar PHP desde: https://www.php.net/downloads.php
+5. Habilitar extensión `pgsql` en el archivo `php.ini`
 
-### 3. Base de datos
+### 3. Configurar PostgreSQL
 
 ```bash
-# Conectar a PostgreSQL
+# Conectar a PostgreSQL como usuario postgres
 sudo -u postgres psql
 
-# Crear base de datos
+# Crear base de datos y usuario
 CREATE DATABASE prueba_tecnica;
-CREATE USER tu_usuario WITH PASSWORD 'tu_password';
-GRANT ALL PRIVILEGES ON DATABASE prueba_tecnica TO tu_usuario;
+CREATE USER prueba_user WITH PASSWORD 'prueba123';
+GRANT ALL PRIVILEGES ON DATABASE prueba_tecnica TO prueba_user;
 \q
 ```
 
-### 4. Importar schema
+### 4. Importar Esquema de Base de Datos
 
 ```bash
-psql -U tu_usuario -d prueba_tecnica -f SQL/schema.sql
+# Desde el directorio del proyecto
+psql -U prueba_user -d prueba_tecnica -f SQL/schema.sql
 ```
 
-### 5. Configuración
+### 5. Configurar Variables de Entorno
 
-Crear `.env` basado en `.env.example`:
+Crear archivo `.env` en la raíz del proyecto:
 
 ```env
 # Configuración de Base de Datos
 DB_HOST=localhost
 DB_NAME=prueba_tecnica
-DB_USER=tu_usuario
-DB_PASSWORD=tu_password
+DB_USER=prueba_user
+DB_PASSWORD=prueba123
 DB_PORT=5432
+```
 
-# Configuración del Servidor
-SERVER_PORT=8015
-DEBUG_MODE=false
+### 6. Configurar Servidor Web
+
+#### Opción A: Servidor PHP Integrado (Desarrollo)
+```bash
+# Desde el directorio del proyecto
+php -S localhost:8000
+```
+
+#### Opción B: Apache (Producción)
+```bash
+# Copiar proyecto a directorio web
+sudo cp -r . /var/www/html/prueba-tecnica
+sudo chown -R www-data:www-data /var/www/html/prueba-tecnica
+```
+
+### 7. Acceder a la Aplicación
+
+Abrir navegador web y visitar:
+- Servidor PHP: `http://localhost:8000`
+- Apache: `http://localhost/prueba-tecnica`
+
+## Estructura del Proyecto
+
+```
+prueba-tecnica/
+├── index.php                    # Página principal
+├── routing.php                  # Enrutador de la aplicación
+├── config/
+│   └── database.php            # Configuración de base de datos
+├── controllers/
+│   └── producto.php            # Controlador de productos
+├── models/
+│   └── producto.php            # Modelo de productos
+├── views/
+│   └── formulario_producto.php # Vista del formulario
+├── css/
+│   └── styles.css              # Estilos CSS nativos
+├── js/
+│   ├── index.js                # JavaScript principal
+│   └── modules/                # Módulos ES6
+│       ├── validators/
+│       │   └── ProductoValidator.js
+│       ├── services/
+│       │   └── ProductoService.js
+│       └── utils/
+│           ├── FormUtils.js
+│           └── UIUtils.js
+├── SQL/
+│   └── schema.sql              # Esquema de base de datos
+├── validators/
+└── exceptions/
+```
+
+## Características Implementadas
+
+### Formulario de Registro
+- **Código del Producto**: Validación obligatoria, formato específico (5-15 caracteres, letras y números), verificación de unicidad
+- **Nombre del Producto**: Obligatorio, 2-50 caracteres
+- **Bodega**: Select dinámico cargado desde base de datos
+- **Sucursal**: Select dependiente de bodega seleccionada
+- **Moneda**: Select cargado desde base de datos
+- **Precio**: Validación de número positivo con hasta 2 decimales
+- **Material**: Checkboxes con mínimo 2 selecciones requeridas
+- **Descripción**: Textarea obligatoria, 10-1000 caracteres
+
+### Validaciones JavaScript
+- Validaciones en tiempo real sin atributo `required` de HTML
+- Mensajes de error personalizados con `alert()`
+- Expresiones regulares para formato de código y precio
+- Validación de selección múltiple en materiales
+
+### Tecnología AJAX
+- Envío de formulario sin recarga de página
+- Carga dinámica de sucursales según bodega
+- Verificación de unicidad de código de producto
+- Manejo de errores y respuestas del servidor
+
+### Estilos CSS Nativos
+- Fuente: Arial, sans-serif, 16px
+- Botón "Guardar Producto": Color #1aab8a, tamaño 16px
+- Sin frameworks CSS (Bootstrap, Tailwind, etc.)
+- Diseño responsivo y funcional
+
+## Base de Datos
+
+### Tablas Principales
+- `productos`: Almacena información de productos
+- `bodegas`: Catálogo de bodegas
+- `sucursales`: Sucursales por bodega
+- `monedas`: Tipos de moneda
+- `materiales`: Materiales disponibles
+- `producto_materiales`: Relación muchos a muchos
+
+### Versión de Base de Datos
+- **PostgreSQL**: 12 o superior
+- **Extensiones**: pgcrypto (para generación de UUIDs)
+
+## Información de Contacto
+
+Para cualquier consulta sobre el proyecto:
+
+- **Desarrollador**: Matias Bello Rodriguez
+- **GitHub**: https://github.com/matias-bello-rodriguez/prueba-tecnica
+- **Repositorio**: Proyecto de prueba técnica
+
+## Notas Técnicas
+
+- Proyecto desarrollado sin frameworks para cumplir especificaciones técnicas
+- Validaciones implementadas completamente en JavaScript nativo
+- Base de datos diseñada con relaciones normalizadas
+- Código modular con separación de responsabilidades
+- Compatible con despliegue en Render.com
 
 # IMPORTANTE: 
 # - Cambiar DB_USER por tu usuario de PostgreSQL
@@ -253,88 +361,6 @@ El Dockerfile se encarga automáticamente de:
 - Instalar PHP 8.2 con extensiones PostgreSQL
 - Configurar el servidor para puerto dinámico
 - Optimizar el contenedor para producción
-
-## Gestión de Base de Datos con pgAdmin
-
-### 1. Instalar pgAdmin
-
-**Windows/macOS:**
-- Descargar desde: https://www.pgadmin.org/download/
-
-**Ubuntu/Debian:**
-```bash
-sudo apt install pgadmin4
-```
-
-**Fedora:**
-```bash
-sudo dnf install pgadmin4
-```
-
-### 2. Configurar conexión a Render
-
-1. **Abrir pgAdmin**
-2. **Click derecho en "Servers"** → **Create** → **Server**
-3. **Configurar conexión:**
-
-**Pestaña "General":**
-- Name: `Render - Prueba Técnica`
-
-**Pestaña "Connection":**
-- Host: `dpg-abc123-a.oregon-postgres.render.com` (tu host de Render)
-- Port: `5432`
-- Maintenance database: `tu_nombre_bd` (ej: prueba_tecnica_1644)
-- Username: `tu_usuario` (ej: pgres)
-- Password: `tu_password_render`
-
-4. **Save** y conectar
-
-### 3. Operaciones comunes
-
-**Ver datos:**
-- Expandir servidor → Databases → tu_bd → Schemas → public → Tables
-- Click derecho en tabla → **View/Edit Data** → **All Rows**
-
-**Ejecutar consultas:**
-- Click derecho en BD → **Query Tool**
-- Escribir SQL y ejecutar
-
-**Importar schema:**
-```sql
--- En Query Tool, pegar contenido de SQL/schema.sql
-```
-
-**Resetear BD:**
-```sql
-DROP TABLE IF EXISTS producto_material CASCADE;
-DROP TABLE IF EXISTS productos CASCADE;
-DROP TABLE IF EXISTS sucursales CASCADE;
-DROP TABLE IF EXISTS bodegas CASCADE;
-DROP TABLE IF EXISTS monedas CASCADE;
-DROP TABLE IF EXISTS materiales CASCADE;
-```
-
-### 4. Comandos útiles
-
-**Ver estructura:**
-```sql
--- Listar tablas
-SELECT tablename FROM pg_tables WHERE schemaname = 'public';
-
--- Contar registros
-SELECT 'productos' as tabla, COUNT(*) FROM productos
-UNION ALL
-SELECT 'bodegas', COUNT(*) FROM bodegas;
-```
-
-**Backup desde pgAdmin:**
-- Click derecho en BD → **Backup**
-- Formato: Plain
-- Guardar como `backup.sql`
-
-**Restore:**
-- Click derecho en BD → **Restore**
-- Seleccionar archivo `backup.sql`
 ```
 
 **PHP no encuentra extensión pgsql:**
