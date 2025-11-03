@@ -19,7 +19,7 @@ Aplicación web para registro de productos con formulario dinámico.
 ### 1. Clonar proyecto
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/matias-bello-rodriguez/prueba-tecnica.git
 cd prueba-tecnica
 ```
 
@@ -194,7 +194,56 @@ Abrir http://localhost:8015 en el navegador.
 sudo systemctl status postgresql
 
 # Verificar permisos de usuario
+# Verificar permisos de usuario
 sudo -u postgres psql -c "\du"
+```
+
+**PHP no encuentra extensión pgsql:**
+```bash
+# Ubuntu/Debian
+sudo apt install php-pgsql
+sudo service apache2 restart
+
+# Verificar
+php -m | grep pgsql
+```
+
+## Deployment en Render
+
+### 1. Preparar archivos
+
+El proyecto ya incluye `composer.json` configurado.
+
+### 2. Pasos en Render
+
+1. Crear cuenta en render.com
+2. Conectar repositorio: `https://github.com/matias-bello-rodriguez/prueba-tecnica`
+3. **Crear base de datos**:
+   - New → PostgreSQL
+   - Nombre: productos-db
+   - Guardar credenciales
+4. **Crear web service**:
+   - New → Web Service
+   - Conectar repo
+   - Build Command: (vacío)
+   - Start Command: `php -S 0.0.0.0:$PORT`
+   - Variables de entorno:
+     ```
+     DB_HOST=<host-de-render>
+     DB_NAME=<nombre-bd>
+     DB_USER=<usuario-bd>
+     DB_PASSWORD=<password-bd>
+     ```
+
+### 3. Importar datos
+
+Conectar a la BD de Render y ejecutar:
+
+```bash
+psql <url-connection-render> < SQL/schema.sql
+```
+
+La app estará en: `https://tu-app.onrender.com`
 ```
 
 **PHP no encuentra extensión pgsql:**
