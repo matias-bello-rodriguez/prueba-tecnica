@@ -14,7 +14,7 @@ class Producto{
 
     init(){
         this.bindEvents();
-        this.initValidacion();
+        // Eliminada initValidacion() - validación solo en handleSubmit para evitar múltiples alertas
     }
 
     // relacionar eventos con funciones, maniulando el DOM
@@ -33,110 +33,32 @@ class Producto{
     }
 
 
-    //inicia la validacion del form
-    initValidacion() {
-        // previne envio en caso de que las validaciones marcquen el fomrulario como invalido
-        this.form.addEventListener('invalid', (e) => {
-            e.preventDefault(); //listner para verificar si el formulario es invalido
-            this.validarTodosLosCampos();//invocar a funcion para validar los formularios
-        }, true);
-    }    
-
-    // función asincrona que espera el submit del formulario
+        // función asincrona que espera el submit del formulario
     async handleSubmit(e){
         e.preventDefault();
 
-            // DEBUG COMPLETO
-    console.log('=== DIAGNÓSTICO COMPLETO ===');
-    
-    // 1. Verificar que el formulario existe
-    console.log('Formulario encontrado:', !!this.form);
-    console.log('Formulario válido:', this.form ? this.form.checkValidity() : 'No hay formulario');
-    
-    // 2. Contar todos los campos
-    const campos = this.form ? this.form.querySelectorAll('input, select, textarea') : [];
-    console.log('Total de campos encontrados:', campos.length);
-    
-    // 3. Listar cada campo y su valor
-    console.log('=== CAMPOS Y VALORES ===');
-    campos.forEach((campo, index) => {
-        let valor = '';
-        if (campo.type === 'checkbox') {
-            valor = campo.checked ? campo.value : '(no marcado)';
-        } else {
-            valor = campo.value || '(vacío)';
-        }
-        console.log(`${index + 1}. ${campo.name || 'SIN NAME'} (${campo.type || campo.tagName}): "${valor}"`);
-    });
+        // DEBUG: Solo para desarrollo - mostrar información del formulario
+        this.mostrarDebugInfo();
 
-        // 4. Verificar FormData
-    const formData = new FormData(this.form);
-    console.log('=== FORMDATA ENTRIES ===');
-    let entryCount = 0;
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: "${value}"`);
-        entryCount++;
-    }
-    console.log('Total entries en FormData:', entryCount);
-    console.log('===============================');
-
-    // 5. Verificar manualmente los valores más importantes
-    console.log('=== VERIFICACIÓN MANUAL ===');
-    console.log('Código:', document.getElementById('codigo')?.value || 'NO ENCONTRADO');
-    console.log('Nombre:', document.getElementById('nombre')?.value || 'NO ENCONTRADO');
-    console.log('Bodega:', document.getElementById('bodega')?.value || 'NO ENCONTRADO');
-    console.log('Sucursal:', document.getElementById('sucursal')?.value || 'NO ENCONTRADO');
-    console.log('Moneda:', document.getElementById('moneda')?.value || 'NO ENCONTRADO');
-    console.log('Precio:', document.getElementById('precio')?.value || 'NO ENCONTRADO');
-    console.log('Descripción:', document.getElementById('descripcion')?.value || 'NO ENCONTRADO');
-    
-    const materialesChecked = document.querySelectorAll('input[name="materiales[]"]:checked');
-    console.log('Materiales seleccionados:', materialesChecked.length);
-    materialesChecked.forEach(mat => console.log('- Material:', mat.value));
-
-
-        // si la funcion validarTodosLosCampos no se ha ejecutado, mostrar alerta
-
+        // VALIDACIÓN: ejecutar validaciones antes de enviar
         if (!this.validarTodosLosCampos()) {
-            return;
+            return; // Si hay errores, no continuar con el envío
         }
         
         this.setLoading(true); //marcar evento como cargando
 
         try {
-            const formData = new FormData();
-            formData.append('ajax', '1');
-            formData.append('action', 'registrar_producto');
-            
-            const codigo = document.getElementById('codigo');
-            const nombre = document.getElementById('nombre');
-            const bodega = document.getElementById('bodega');
-            const sucursal = document.getElementById('sucursal');
-            const moneda = document.getElementById('moneda');
-            const precio = document.getElementById('precio');
-            const descripcion = document.getElementById('descripcion');
-            
-            if (codigo) formData.append('codigo', codigo.value);
-            if (nombre) formData.append('nombre', nombre.value);
-            if (bodega) formData.append('bodega_id', bodega.value);
-            if (sucursal) formData.append('sucursal_id', sucursal.value);
-            if (moneda) formData.append('moneda_id', moneda.value);
-            if (precio) formData.append('precio', precio.value);
-            if (descripcion) formData.append('descripcion', descripcion.value);
-            
-            const materialesChecked = document.querySelectorAll('input[name="materiales[]"]:checked');
-            materialesChecked.forEach(material => {
-                formData.append('materiales[]', material.value);
-            });
+            // Crear FormData con todos los datos del formulario
+            const formData = this.crearFormData();
 
             const response = await fetch('index.php',{
                 method: 'POST',
                 body: formData
             });
 
-            //lanzar excepción
+            //lanzar excepción si la respuesta no es exitosa
             if (!response.ok) {
-                throw new Error(`error HTTP con status: ${response.status}`);
+                throw new Error(`Error HTTP con status: ${response.status}`);
             }            
 
             //definir variable data con la respuesta JSON enviada de PHP
@@ -154,7 +76,92 @@ class Producto{
         } finally{
             this.setLoading(false);
         }
+    }
 
+    // método para crear FormData con todos los campos del formulario
+    crearFormData(){
+        const formData = new FormData();
+        formData.append('ajax', '1');
+        formData.append('action', 'registrar_producto');
+        
+        // los campos del formulario
+        const campos = {
+            codigo: document.getElementById('codigo'),
+            nombre: document.getElementById('nombre'),
+            bodega: document.getElementById('bodega'),
+            sucursal: document.getElementById('sucursal'),
+            moneda: document.getElementById('moneda'),
+            precio: document.getElementById('precio'),
+            descripcion: document.getElementById('descripcion')
+        };
+        
+        // agregar campos individuales al FormData
+        Object.entries(campos).forEach(([key, element]) => {
+            if (element && element.value) {
+                const fieldName = key === 'bodega' ? 'bodega_id' : 
+                                key === 'sucursal' ? 'sucursal_id' : 
+                                key === 'moneda' ? 'moneda_id' : key;
+                formData.append(fieldName, element.value);
+            }
+        });
+        
+        // agregar materiales seleccionados
+        const materialesChecked = document.querySelectorAll('input[name="materiales[]"]:checked');
+        materialesChecked.forEach(material => {
+            formData.append('materiales[]', material.value);
+        });
+
+        return formData;
+    }
+
+    // método auxiliar para mostrar información de debug (solo para desarrollo)
+    mostrarDebugInfo(){
+        console.log('=== DIAGNÓSTICO COMPLETO ===');
+        
+        // 1. Verificar que el formulario existe
+        console.log('Formulario encontrado:', !!this.form);
+        console.log('Formulario válido:', this.form ? this.form.checkValidity() : 'No hay formulario');
+        
+        // 2. Contar todos los campos
+        const campos = this.form ? this.form.querySelectorAll('input, select, textarea') : [];
+        console.log('Total de campos encontrados:', campos.length);
+        
+        // 3. Listar cada campo y su valor
+        console.log('=== CAMPOS Y VALORES ===');
+        campos.forEach((campo, index) => {
+            let valor = '';
+            if (campo.type === 'checkbox') {
+                valor = campo.checked ? campo.value : '(no marcado)';
+            } else {
+                valor = campo.value || '(vacío)';
+            }
+            console.log(`${index + 1}. ${campo.name || 'SIN NAME'} (${campo.type || campo.tagName}): "${valor}"`);
+        });
+
+        // 4. Verificar FormData
+        const formData = new FormData(this.form);
+        console.log('=== FORMDATA ENTRIES ===');
+        let entryCount = 0;
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: "${value}"`);
+            entryCount++;
+        }
+        console.log('Total entries en FormData:', entryCount);
+        
+        // 5. Verificar manualmente los valores más importantes
+        console.log('=== VERIFICACIÓN MANUAL ===');
+        console.log('Código:', document.getElementById('codigo')?.value || 'NO ENCONTRADO');
+        console.log('Nombre:', document.getElementById('nombre')?.value || 'NO ENCONTRADO');
+        console.log('Bodega:', document.getElementById('bodega')?.value || 'NO ENCONTRADO');
+        console.log('Sucursal:', document.getElementById('sucursal')?.value || 'NO ENCONTRADO');
+        console.log('Moneda:', document.getElementById('moneda')?.value || 'NO ENCONTRADO');
+        console.log('Precio:', document.getElementById('precio')?.value || 'NO ENCONTRADO');
+        console.log('Descripción:', document.getElementById('descripcion')?.value || 'NO ENCONTRADO');
+        
+        const materialesChecked = document.querySelectorAll('input[name="materiales[]"]:checked');
+        console.log('Materiales seleccionados:', materialesChecked.length);
+        materialesChecked.forEach(mat => console.log('- Material:', mat.value));
+        console.log('===============================');
     }
 
     async cargarSucursales(bodegaId){
@@ -217,8 +224,7 @@ class Producto{
      }
 
     validarTodosLosCampos(){
-        let errores =  []; //variable con scope para toda la funcion no estática para acumular errores
-
+        let errores = []; //variable con scope para toda la funcion no estática para acumular errores
 
         //toma todos los elementos con valores y los valida
         this.form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
@@ -226,92 +232,88 @@ class Producto{
             if (error) {
                 errores.push(error);
             }//guarda el error en el array de errores
+        });
 
-            });
+        // validar materiales
+        const errorMateriales = this.validarMateriales();
+        if (errorMateriales) {
+            errores.push(errorMateriales);
+        }
+                
+        // si hay errores, mostrar alerta personalizada
+        if (errores.length > 0) {
+            this.mostrarAlertaValidacion(errores);
+            return false;
+        }
 
-            // validar materiales
-            const errorMateriales = this.validarMateriales();
-            if (errorMateriales) {
-                errores.push(errorMateriales);
-            }
-                    
-            // si hay errores, mostrar alerta personalizada
-            if (errores.length > 0) {
-                this.mostrarAlertaValidacion(errores);
-                return false;
-            }
+        return true;
+    }
 
-            return true;
-
-}
-
-    //valida cada campo indivudalmente
+    //VALIDACIONES REGEX
+    //valida cada campo individualmente usando REGEX para mayor precisión
     validarCampo(field){
         const valor = field.value.trim(); //elimina espacio al inicio y final
         const nombreCampo = field.name; //obtenemos el nombre del campo de los select, input o textarea
         let errorMsj = '';
 
-
         console.log(`Validando ${nombreCampo}:`, `"${valor}"`);
 
-
         // hacemos un switch para resolver cada atributo dependiendo del tipo
-         switch (nombreCampo) {
+        switch (nombreCampo) {
             case 'codigo':
+                // REGEX: Solo letras, números, guiones y espacios, entre 5-15 caracteres
+                const regexCodigo = /^[A-Za-z0-9\-\s]{5,15}$/;
                 if (!valor) {
                     errorMsj = 'El código es requerido';
-                } else if (valor.length < 5 || valor.length > 15) {
-                    errorMsj = 'El código no puede ser menor de 5 caracteres y mayor a 15';
+                } else if (!regexCodigo.test(valor)) {
+                    errorMsj = 'El código debe tener 5-15 caracteres (solo letras, números, espacios y guiones)';
                 }
                 break;
                 
             case 'nombre':
+                // REGEX: Solo letras, espacios, tildes, ñ, guiones y puntos, entre 2-50 caracteres
+                const regexNombre = /^[A-Za-zÀ-ÿ\u00f1\u00d1\s\-\.]{2,50}$/;
                 if (!valor) {
                     errorMsj = 'El nombre es requerido';
-                } else if (valor.length < 2 || valor.length > 50) {
-                    errorMsj = 'El código no puede ser menor de 2 caracteres y mayor a 50';
+                } else if (!regexNombre.test(valor)) {
+                    errorMsj = 'El nombre debe tener 2-50 caracteres (solo letras, espacios, tildes y signos de puntuación básicos)';
                 }
                 break;
                 
             case 'bodega_id':
-                if (!valor || valor === '') {
-                    errorMsj = 'Debe seleccionar una bodega';
-                }
-                break;           
-            
             case 'sucursal_id':
-                if (!valor || valor === '') {
-                    errorMsj = 'Debe seleccionar una sucursal';
-                }
-                break;
-                
             case 'moneda_id':
-                if (!valor || valor === '') {
-                    errorMsj = 'Debe seleccionar una moneda';
+                // Validación para selects: debe tener un valor válido (no vacío ni placeholder)
+                if (!valor || valor === '' || valor === '0') {
+                    const nombreLimpio = nombreCampo.replace('_id', '').replace('_', ' ');
+                    errorMsj = `Debe seleccionar una ${nombreLimpio}`;
                 }
                 break;
                 
-           case 'precio':
+            case 'precio':
+                // REGEX: Números decimales positivos con hasta 2 decimales
+                const regexPrecio = /^\d+(\.\d{1,2})?$/;
                 if (!valor) {
                     errorMsj = 'El precio es requerido';
-                } else {
-                    const precioNumero = parseFloat(valor);
-                    if (isNaN(precioNumero) || precioNumero <= 0) {
-                        errorMsj = 'El precio debe ser un número mayor a 0';
-                    }
+                } else if (!regexPrecio.test(valor)) {
+                    errorMsj = 'El precio debe ser un número válido (ejemplo: 123.45, máximo 2 decimales)';
+                } else if (parseFloat(valor) <= 0) {
+                    errorMsj = 'El precio debe ser mayor a 0';
                 }
                 break;
                 
-        case 'descripcion':
-            if (!valor) {
-                errorMsj = 'La descripción es requerida';
-            } else if (valor.length < 10 || valor.length > 1000) {
-                errorMsj = 'La descripción debe tener entre 10 y 1000 caracteres';
-            }
-            break;
+            case 'descripcion':
+                // REGEX: Cualquier carácter incluyendo saltos de línea, entre 10-1000 caracteres
+                const regexDescripcion = /^.{10,1000}$/s;
+                if (!valor) {
+                    errorMsj = 'La descripción es requerida';
+                } else if (!regexDescripcion.test(valor)) {
+                    errorMsj = 'La descripción debe tener entre 10 y 1000 caracteres';
+                }
+                break;
         }        
 
-        return errorMsj; //retornar true, si no entra a ning case del switch   
+        return errorMsj; //retornar mensaje de error o string vacío si no hay error
     }
 
     // funcion que valida que haya al menos dos checkbox seleccionados
@@ -329,14 +331,14 @@ class Producto{
     }
 
     mostrarAlertaValidacion(errores) {
-    let mensaje = "Por favor, corrija los siguientes errores:\n\n";
-    
-    errores.forEach((error, index) => {
-        mensaje += `${index + 1}. ${error}\n`;
-    });
-    
-    alert(mensaje); // mostrar todos los errores en una sola alerta
-}
+        let mensaje = "Por favor, corrija los siguientes errores:\n\n";
+        
+        errores.forEach((error, index) => {
+            mensaje += `${index + 1}. ${error}\n`;
+        });
+        
+        alert(mensaje); // mostrar todos los errores en una sola alerta
+    }
 
     //estalece el estado de cargando al enviar el formulario
     setLoading(loading) {
